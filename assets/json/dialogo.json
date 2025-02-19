@@ -1,0 +1,56 @@
+{
+  "Dialogo": {
+    "dialogo_1": {
+      "texto": "Esto es una prueba",
+      "npc": "veronica",
+      "pose": "enfado",
+      "fondo": "calse",
+      "opciones": true,
+      "opcion_1": "dialogo_2",
+      "texto_1": "ve a dialogo 2",
+      "opcion_2": "dialogo_3",
+      "texto_2": "ve a dialogo 3",
+      "opcion_3": "dialogo_4",
+      "texto_3": "ve a dialogo 4"
+    },
+    "dialogo_2": {
+      "texto": "Esto es otra una prueba",
+      "npc": "prota",
+      "pose": "triste",
+      "fondo": "clase",
+      "opciones": false,
+      "opcion_1": null,
+      "texto_1": null,
+      "opcion_2": null,
+      "texto_2": null,
+      "opcion_3": null,
+      "texto_3": null
+    },
+    "dialogo_3": {
+      "texto": "Esto es otra una prueba 2",
+      "npc": "prota",
+      "pose": "alegre",
+      "fondo": "clase",
+      "opciones": false,
+      "opcion_1": null,
+      "texto_1": null,
+      "opcion_2": null,
+      "texto_2": null,
+      "opcion_3": null,
+      "texto_3": null
+    },
+    "dialogo_4": {
+      "texto": "Esto es otra una prueba 3",
+      "npc": "prota",
+      "pose": "normal",
+      "fondo": "clase",
+      "opciones": false,
+      "opcion_1": null,
+      "texto_1": null,
+      "opcion_2": null,
+      "texto_2": null,
+      "opcion_3": null,
+      "texto_3": null
+    }
+  }
+}

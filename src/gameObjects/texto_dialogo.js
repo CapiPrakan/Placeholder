@@ -1,20 +1,23 @@
-class TextoDialogo extends Phaser.GameObjects.BitmapText {
+class TextoDialogo extends Phaser.GameObjects.Text {
     constructor(scene, cuadro_dialogo_width, x, y, texto, opciones = {}) {
-        // Opciones por defecto para el BitmapText
+        // Opciones por defecto para el Text
         let opcionesPorDefecto = {
-            fontSize: 32,
+            fontSize: "32px",
+            fontFamily: "Arial",
+            color: "#000000",
             align: "left",
-            maxWidth: cuadro_dialogo_width - 20
+            lineSpacing: 10,
+            wordWrap: { width: cuadro_dialogo_width - 20 },
         };
 
         // Mezclar opciones personalizadas con las predeterminadas
         opciones = { ...opcionesPorDefecto, ...opciones };
 
-        // Llamar al constructor de BitmapText
-        super(scene, x, y, "pixelFont", "", opciones.fontSize);
+        // Llamar al constructor de Text
+        super(scene, x, y, "", opciones);
 
         // Ajustar el origen (centrado)
-        this.setOrigin(0.5);
+        this.setOrigin(0, 0);
 
         // Agregar el objeto a la escena
         scene.add.existing(this);
@@ -25,10 +28,11 @@ class TextoDialogo extends Phaser.GameObjects.BitmapText {
 
     // Método para actualizar el texto con animación
     actualizarTexto(nuevoTexto) {
+        // this.text = nuevoTexto;
         this.animacion_texto(nuevoTexto);
     }
 
-    // Método para animar el texto tipo máquina de escribir
+    // Método para animar el texto tipo máquina de escribir con colores aleatorios
     animacion_texto(texto) {
         let i = 0;
         let texto_animado = "";

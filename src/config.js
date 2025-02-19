@@ -1,3 +1,4 @@
+import Dialogo from '/src/scenes/dialogo.js';
 import Bootloader from '/src/bootloader.js'; // Importamos el Bootloader
 import ScenePlay from '/src/scenes/scene_play.js'; // Importamos la escena ScenePlay
 
@@ -18,7 +19,8 @@ const config = {
     // Escenas del juego
     scene: [
         Bootloader,
-        ScenePlay
+        ScenePlay,
+        Dialogo
     ],
 }
 
