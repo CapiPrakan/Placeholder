@@ -3,7 +3,7 @@ import { IMAGE_CUADRADO_DIALOGO, IMAGE_BOTON_DIALOGO, JSON_DIALOGO } from '/src/
 
 import CuadroDialogo from "/src/gameObjects/cuadrado_dialogo.js";
 import BotonDialogo from "/src/gameObjects/boton_dialogo.js";
-import TextoDialogo from "/src/gameObjects/texto_dialogo.js";
+// import TextoDialogo from "/src/gameObjects/texto_dialogo.js";
 
 class Dialogo extends Phaser.Scene {
     constructor() {
@@ -24,14 +24,7 @@ class Dialogo extends Phaser.Scene {
         this.height = this.sys.game.config.height;
 
         // Cuadro de diálogo
-        this.cuadro_dialogo = new CuadroDialogo(this, this.width / 2, this.height - 150, IMAGE_CUADRADO_DIALOGO);
-
-        // Crear el texto usando BitmapText
-        let texto_dialogo_x = this.width / 2 - this.cuadro_dialogo.width / 2 + 20;
-        let texto_dialogo_y = this.height - 150 - this.cuadro_dialogo.height / 2 + 15;
-        this.texto = new TextoDialogo(this, this.cuadro_dialogo.width - 10, texto_dialogo_x, texto_dialogo_y, this.dialogo_data[this.nombre_dialogo]['texto'], {});
-
-        // this.texto.actualizarTexto();
+        this.cuadro_dialogo = new CuadroDialogo(this, this.width / 2, this.height - 150, IMAGE_CUADRADO_DIALOGO, this.dialogo_data[this.nombre_dialogo]['texto']);
 
         // Capturar tecla de espacio
         this.cursor = this.input.keyboard.createCursorKeys();

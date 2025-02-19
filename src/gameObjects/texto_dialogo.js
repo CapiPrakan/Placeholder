@@ -1,5 +1,5 @@
 class TextoDialogo extends Phaser.GameObjects.Text {
-    constructor(scene, cuadro_dialogo_width, x, y, texto, opciones = {}) {
+    constructor(scene, cuadro_dialogo_width, x, y, texto, botones, opciones = {}) {
         // Opciones por defecto para el Text
         let opcionesPorDefecto = {
             fontSize: "32px",
@@ -19,6 +19,15 @@ class TextoDialogo extends Phaser.GameObjects.Text {
         // Ajustar el origen (centrado)
         this.setOrigin(0, 0);
 
+        if (botones) {
+            let texto_final = scene.add.text(this.x, this.y, texto, opcionesPorDefecto);
+            
+            console.log(texto_final.width);
+            console.log(this.x);
+            this.x -= texto_final.width / 2;
+            texto_final.destroy();
+        }
+
         // Agregar el objeto a la escena
         scene.add.existing(this);
 
@@ -28,7 +37,6 @@ class TextoDialogo extends Phaser.GameObjects.Text {
 
     // Método para actualizar el texto con animación
     actualizarTexto(nuevoTexto) {
-        // this.text = nuevoTexto;
         this.animacion_texto(nuevoTexto);
     }
 
@@ -37,6 +45,7 @@ class TextoDialogo extends Phaser.GameObjects.Text {
         let i = 0;
         let texto_animado = "";
         let texto_completo = texto;
+
         let intervalo = setInterval(() => {
             texto_animado += texto_completo[i];
             this.setText(texto_animado);

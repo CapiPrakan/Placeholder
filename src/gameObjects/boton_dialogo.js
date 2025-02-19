@@ -1,3 +1,5 @@
+import TextoDialogo from "/src/gameObjects/texto_dialogo.js";
+
 class BotonDialogo extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, type, name, texto) {
         super(scene, x, y, type);
@@ -9,13 +11,7 @@ class BotonDialogo extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);
 
         // Centrar el texto dentro del botón
-        scene.add.text(x - this.width / 2, y, texto, {
-            align: "center",
-            fontFamily: 'Arial',
-            fontSize: 32,
-            color: '#000000',
-            wordWrap: { width: this.width - 20, height: this.height - 10 }
-        }).setOrigin(0.5, 0.5); // Cambia el origen al centro
+        this.texto = new TextoDialogo(scene, this.width - 10, x - this.width / 2, y, texto, true, {}).setOrigin(0, 0.5);
     }
 
     set_event(name) {
