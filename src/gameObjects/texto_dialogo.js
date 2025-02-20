@@ -1,3 +1,5 @@
+import { EVENT_TEXTO_DIALOGO } from "../data/events_data";
+
 class TextoDialogo extends Phaser.GameObjects.Text {
     constructor(scene, cuadro_dialogo_width, x, y, texto, botones, opciones = {}) {
         // Opciones por defecto para el Text
@@ -16,14 +18,15 @@ class TextoDialogo extends Phaser.GameObjects.Text {
         // Llamar al constructor de Text
         super(scene, x, y, "", opciones);
 
+        // Event Emitter
+        // this.ee = new Phaser.Events.EventEmitter();
+
         // Ajustar el origen (centrado)
         this.setOrigin(0, 0);
 
         if (botones) {
             let texto_final = scene.add.text(this.x, this.y, texto, opcionesPorDefecto);
             
-            console.log(texto_final.width);
-            console.log(this.x);
             this.x -= texto_final.width / 2;
             texto_final.destroy();
         }
@@ -33,6 +36,9 @@ class TextoDialogo extends Phaser.GameObjects.Text {
 
         // Mostrar el texto con animación
         this.actualizarTexto(texto);
+    }
+
+    init() {
     }
 
     // Método para actualizar el texto con animación
@@ -46,14 +52,20 @@ class TextoDialogo extends Phaser.GameObjects.Text {
         let texto_animado = "";
         let texto_completo = texto;
 
-        let intervalo = setInterval(() => {
-            texto_animado += texto_completo[i];
-            this.setText(texto_animado);
-            i++;
-            if (i === texto_completo.length) {
-                clearInterval(intervalo);
-            }
-        }, 50);
+        setTimeout(() => {
+            let intervalo = setInterval(() => {
+                texto_animado += texto_completo[i];
+                this.setText(texto_animado);
+                i++;
+                if (i === texto_completo.length) {
+                    clearInterval(intervalo);
+
+                    this.scene.events.emit(EVENT_TEXTO_DIALOGO);
+                }
+            }, 50);
+        }, 150);
+
+        
     }
 }
 
