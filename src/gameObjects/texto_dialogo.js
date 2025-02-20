@@ -2,7 +2,8 @@ import { EVENT_TEXTO_DIALOGO } from "../data/events_data";
 
 class TextoDialogo extends Phaser.GameObjects.Text {
     constructor(scene, cuadro_dialogo_width, x, y, texto, botones, opciones = {}) {
-        // Opciones por defecto para el Text
+
+        // opciones por defecto para el Text
         let opcionesPorDefecto = {
             fontSize: "32px",
             fontFamily: "Arial",
@@ -12,18 +13,16 @@ class TextoDialogo extends Phaser.GameObjects.Text {
             wordWrap: { width: cuadro_dialogo_width - 20 },
         };
 
-        // Mezclar opciones personalizadas con las predeterminadas
+        // mezclar opciones personalizadas con las predeterminadas
         opciones = { ...opcionesPorDefecto, ...opciones };
 
-        // Llamar al constructor de Text
+        // llamar al constructor de Text
         super(scene, x, y, "", opciones);
 
-        // Event Emitter
-        // this.ee = new Phaser.Events.EventEmitter();
-
-        // Ajustar el origen (centrado)
+        // ajustar el origen (centrado)
         this.setOrigin(0, 0);
 
+        // en caso de ser un botón, centrar el texto
         if (botones) {
             let texto_final = scene.add.text(this.x, this.y, texto, opcionesPorDefecto);
             
@@ -31,22 +30,22 @@ class TextoDialogo extends Phaser.GameObjects.Text {
             texto_final.destroy();
         }
 
-        // Agregar el objeto a la escena
+        // agregar el objeto a la escena
         scene.add.existing(this);
 
-        // Mostrar el texto con animación
+        // mostrar el texto con animación
         this.actualizarTexto(texto);
     }
 
     init() {
     }
 
-    // Método para actualizar el texto con animación
+    // método para actualizar el texto con animación
     actualizarTexto(nuevoTexto) {
         this.animacion_texto(nuevoTexto);
     }
 
-    // Método para animar el texto tipo máquina de escribir con colores aleatorios
+    // método para animar el texto tipo máquina de escribir con colores aleatorios
     animacion_texto(texto) {
         let i = 0;
         let texto_animado = "";
