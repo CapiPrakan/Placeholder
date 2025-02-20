@@ -4,6 +4,8 @@ import {
     JSON_DIALOGO, JSON_DIALOGO_PATH 
 } from "./data/assets_data";
 
+// la idea es q este se encarge de agregar cada escena y cargue los assets correspondientes 
+// ( de momento solo carga el dialogo )
 class Bootloader extends Phaser.Scene {
     constructor() {
         super({ key: "Bootloader", active: true });

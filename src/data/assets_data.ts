@@ -1,3 +1,5 @@
+// datos de los assets del juego
+
 export const IMAGE_CUADRADO_DIALOGO = "img_cuadrado_dialogo";
 export const IMAGE_CUADRADO_DIALOGO_PATH = "/assets/img/cuadrado_dialogo.png";
 
