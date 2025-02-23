@@ -1,10 +1,10 @@
 import { SCENE_DIALOGO } from '/src/data/scene_data.ts';
-import { IMAGE_CUADRADO_DIALOGO, IMAGE_BOTON_DIALOGO, JSON_DIALOGO } from '/src/data/assets_data.ts';
+import { IMAGE_CUADRADO_DIALOGO, IMAGE_CUADRADO_DIALOGO_PATH, IMAGE_BOTON_DIALOGO, IMAGE_BOTON_DIALOGO_PATH, JSON_DIALOGO } from '/src/data/assets_data.ts';
 import { EVENT_TEXTO_DIALOGO } from '/src/data/events_data.ts';
 
 import CuadroDialogo from "/src/gameObjects/cuadrado_dialogo.js";
 import BotonDialogo from "/src/gameObjects/boton_dialogo.js";
-// import TextoDialogo from "/src/gameObjects/texto_dialogo.js";
+import Personajes from "/src/gameObjects/personajes.js";
 
 class Dialogo extends Phaser.Scene {
     constructor() {
@@ -15,6 +15,12 @@ class Dialogo extends Phaser.Scene {
         // inicializar variables
         this.nombre_dialogo = texto;
         this.dialogo_data = this.cache.json.get(JSON_DIALOGO).Dialogo;
+    }
+
+    preload() {
+        // carga de imágenes
+        this.load.image(IMAGE_CUADRADO_DIALOGO, IMAGE_CUADRADO_DIALOGO_PATH);
+        this.load.image(IMAGE_BOTON_DIALOGO, IMAGE_BOTON_DIALOGO_PATH);
     }
 
     create() {
@@ -32,6 +38,8 @@ class Dialogo extends Phaser.Scene {
         if (this.dialogo_data[this.nombre_dialogo]['opciones'] == true) {
             this.añadir_botones();
         }
+
+        // this.personajes = new Personajes(this, );
     }
 
     // función asíncrona que añade los botones de diálogo
@@ -69,10 +77,6 @@ class Dialogo extends Phaser.Scene {
                 resolve();
             });
         });
-    }
-    
-
-    update() {
     }
 }
 

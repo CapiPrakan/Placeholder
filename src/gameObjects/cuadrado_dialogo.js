@@ -7,7 +7,24 @@ class CuadroDialogo extends Phaser.GameObjects.Sprite {
 
         // añadir el cuadro de dialogo a la escena
         scene.add.existing(this);
+        this.scaleX = 0;
+        this.scaleY = 0;
+        this.alpha = 0;
 
+        scene.tweens.add({
+            targets: this,
+            scaleX: 1,
+            scaleY: 1,
+            alpha: 1,
+            duration: 1000,
+            ease: 'Power2',
+            onComplete: () => {
+                this.tween_finnished(scene, x, y, texto);
+            }
+        });
+    }
+
+    tween_finnished(scene, x, y, texto) {
         // añade el texto de dialogo principal
         this.texto = new TextoDialogo(scene, this.width - 10, x - this.width / 2 + 20, y - this.height / 2 + 20, texto, false, {});
     }
