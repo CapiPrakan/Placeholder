@@ -4,7 +4,7 @@ import { EVENT_TEXTO_DIALOGO } from '/src/data/events_data.ts';
 
 import CuadroDialogo from "/src/gameObjects/cuadrado_dialogo.js";
 import BotonDialogo from "/src/gameObjects/boton_dialogo.js";
-import Personajes from "/src/gameObjects/personajes.js";
+import Personaje from "/src/gameObjects/personaje.js";
 
 class Dialogo extends Phaser.Scene {
     constructor() {
@@ -39,7 +39,9 @@ class Dialogo extends Phaser.Scene {
             this.añadir_botones();
         }
 
-        // this.personajes = new Personajes(this, );
+        let personaje_x = this.cuadro_dialogo.x - this.cuadro_dialogo.width / 4 - 50;
+        let personaje_y = this.cuadro_dialogo.y - this.cuadro_dialogo.height / 2;
+        this.personaje = new Personaje(this, personaje_x, personaje_y, this.dialogo_data[this.nombre_dialogo]['npc'], this.dialogo_data[this.nombre_dialogo]['pose']);
     }
 
     // función asíncrona que añade los botones de diálogo
