@@ -1,10 +1,9 @@
-import { IMAGE_PROTA, IMAGE_VERONICA } from '/src/data/assets_data.ts';
-import { PROTA, VERONICA } from '/src/data/npc_data.ts';
+import { IMAGE_PATH, FORMATO_IMAGEN, IMAGE_PROTA, IMAGE_VERONICA, PERSONAJES_POSES } from '/src/data/assets_data.ts';
+import { PERSONAJES, PERSONAJES_PATH, PROTA, VERONICA } from '/src/data/npc_data.ts';
 
 // Es el botón que se muestra en el diálogo
 class BotonDialogo extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, personaje, pose) {
-        console.log(personaje + "_" + pose);
         super(scene, x, y, "");
 
         this.personaje = personaje;
@@ -33,6 +32,10 @@ class BotonDialogo extends Phaser.GameObjects.Sprite {
             default:
                 return null;
         }
+    }
+
+    actualizar_npc(personaje, pose) {
+        this.change_texture(personaje, pose);
     }
 }
 

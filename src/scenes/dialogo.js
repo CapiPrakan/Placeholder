@@ -1,6 +1,11 @@
 import { SCENE_DIALOGO } from '/src/data/scene_data.ts';
-import { IMAGE_CUADRADO_DIALOGO, IMAGE_CUADRADO_DIALOGO_PATH, IMAGE_BOTON_DIALOGO, IMAGE_BOTON_DIALOGO_PATH, JSON_DIALOGO } from '/src/data/assets_data.ts';
-import { EVENT_TEXTO_DIALOGO } from '/src/data/events_data.ts';
+import { 
+    IMAGE_PATH, FORMATO_IMAGEN, IMAGE_CUADRADO_DIALOGO, IMAGE_CUADRADO_DIALOGO_PATH, 
+    IMAGE_BOTON_DIALOGO, IMAGE_BOTON_DIALOGO_PATH, JSON_DIALOGO, IMAGE_PROTA, 
+    IMAGE_VERONICA, PERSONAJES_POSES 
+} from '/src/data/assets_data.ts';
+import { EVENT_TEXTO_DIALOGO, EVENT_SKIP_TEXTO_DIALOGO, EVENT_NEXT_TEXTO_DIALOGO, EVENT_NEXT_TEXTO_DIALOGO2} from '/src/data/events_data.ts';
+import { PERSONAJES, PERSONAJES_PATH, PROTA, VERONICA } from '/src/data/npc_data.ts';
 
 import CuadroDialogo from "/src/gameObjects/cuadrado_dialogo.js";
 import BotonDialogo from "/src/gameObjects/boton_dialogo.js";
@@ -8,7 +13,7 @@ import Personaje from "/src/gameObjects/personaje.js";
 
 class Dialogo extends Phaser.Scene {
     constructor() {
-        super({ key: SCENE_DIALOGO });
+        super({ key: SCENE_DIALOGO, active: false });
     }
 
     init(texto) {
@@ -16,12 +21,22 @@ class Dialogo extends Phaser.Scene {
         this.texto_finalizado = false;
         this.nombre_dialogo = texto;
         this.dialogo_data = this.cache.json.get(JSON_DIALOGO).Dialogo;
+        this.skip_animation = false;
+        this.can_be_clicked = false;
     }
 
     preload() {
         // carga de imágenes
         this.load.image(IMAGE_CUADRADO_DIALOGO, IMAGE_CUADRADO_DIALOGO_PATH);
         this.load.image(IMAGE_BOTON_DIALOGO, IMAGE_BOTON_DIALOGO_PATH);
+        
+        for (let i = 0; i < PERSONAJES.length; i++) {
+            this.cargar_personajes(PERSONAJES[i]);
+        }
+
+        setTimeout(() => {
+            this.can_be_clicked = true;
+        }, 100);
     }
 
     create() {
@@ -30,7 +45,7 @@ class Dialogo extends Phaser.Scene {
         this.height = this.sys.game.config.height;
 
         // Cuadro de diálogo
-        this.cuadro_dialogo = new CuadroDialogo(this, this.width / 2, this.height - 150, IMAGE_CUADRADO_DIALOGO, this.dialogo_data[this.nombre_dialogo]['texto']);
+        this.cuadro_dialogo = new CuadroDialogo(this, this.width / 2, this.height - 150, IMAGE_CUADRADO_DIALOGO, this.dialogo_data[this.nombre_dialogo]['texto'], false);
 
         // Capturar tecla de espacio
         this.cursor = this.input.keyboard.createCursorKeys();
@@ -45,7 +60,8 @@ class Dialogo extends Phaser.Scene {
         this.personaje = new Personaje(this, personaje_x, personaje_y, this.dialogo_data[this.nombre_dialogo]['npc'], this.dialogo_data[this.nombre_dialogo]['pose']);
 
         // Agrega un evento de clic al objeto input de la escena
-        this.input.on('pointerdown', this.onClick, this);
+        this.input.on('pointerdown', this.on_click, this);
+        this.events.on(EVENT_NEXT_TEXTO_DIALOGO, this.on_next_dialogo_text, this);
     }
 
     // función asíncrona que añade los botones de diálogo
@@ -59,13 +75,15 @@ class Dialogo extends Phaser.Scene {
         while (this.dialogo_data[this.nombre_dialogo]['opcion_' + String(i + 1)] != null) {
 
             // esperar a que el evento 'EVENT_TEXTO_DIALOGO' ocurra
-            await this.esperar_evento(EVENT_TEXTO_DIALOGO);
+            if (!this.skip_animation)
+                await this.esperar_evento(EVENT_TEXTO_DIALOGO);
 
             // crear el botón
             this.botons[i] = new BotonDialogo(
                 this, pos_x, pos_y, IMAGE_BOTON_DIALOGO, 
                 this.dialogo_data[this.nombre_dialogo]['opcion_' + String(i + 1)], 
-                this.dialogo_data[this.nombre_dialogo]['texto_' + String(i + 1)]
+                this.dialogo_data[this.nombre_dialogo]['texto_' + String(i + 1)],
+                this.skip_animation
             );
 
             i++;
@@ -76,6 +94,13 @@ class Dialogo extends Phaser.Scene {
         }
 
         this.texto_finalizado = true;
+
+        if (!this.skip_animation)
+            await this.esperar_evento(EVENT_TEXTO_DIALOGO);
+
+        for (let i = 0; i < this.botons.length; i++) {
+            this.botons[i].can_be_clicked = true;
+        }
     }
     
     // función que devuelve una Promesa que espera al evento EVENT_TEXTO_DIALOGO
@@ -87,20 +112,73 @@ class Dialogo extends Phaser.Scene {
         });
     }
 
-    onClick() {
-        if (!this.texto_finalizado && this.dialogo_data[this.nombre_dialogo]['opciones']) {
+    on_click() {
+        if (!this.can_be_clicked) return;
+        if (this.texto_finalizado && !this.dialogo_data[this.nombre_dialogo]['opciones']) {
             if (this.dialogo_data[this.nombre_dialogo]['opcion_1'] == "FIN") {
                 this.scene.stop();
             }
-            this.cuadro_dialogo.actualizar_texto(this.dialogo_data[this.nombre_dialogo]['opcion_1']);
-        } else {
-            if (!this.cuadro_dialogo.texto_finnished) {
-                this.cuadro_dialogo.stop_animation();
-            } else {
-                if (this.botons.length > 0) {
-                    this.botons[this.botons.length - 1].stop_animation();
+            this.events.emit(EVENT_NEXT_TEXTO_DIALOGO, this.dialogo_data[this.nombre_dialogo]['opcion_1']);
+        } else if (!this.cuadro_dialogo.texto_finnished) {
+                this.skip_animation = true;
+                this.events.emit(EVENT_SKIP_TEXTO_DIALOGO);
+        } else if (this.botons.length > 0 && !this.botons[this.botons.length - 1].texto_finnished) {
+            this.skip_animation = true;
+            this.events.emit(EVENT_SKIP_TEXTO_DIALOGO);
+        }
+    }
+
+    on_next_dialogo_text(name) {
+        for (let i = 0; i < this.botons.length; i++) {
+            this.botons[i].destroy();
+        }
+
+        this.skip_animation = false;
+        this.nombre_dialogo = name;
+        this.texto_finalizado = false;
+
+        this.cuadro_dialogo.actualizar_texto(this.dialogo_data[this.nombre_dialogo]['texto']);
+
+         // añade los botones, en caso de que haya opciones
+        if (this.dialogo_data[this.nombre_dialogo]['opciones'] == true) {
+            this.añadir_botones();
+        }
+
+        this.personaje.actualizar_npc(this.dialogo_data[this.nombre_dialogo]['npc'], this.dialogo_data[this.nombre_dialogo]['pose']);
+    }
+
+    cargar_personajes(persoanje) {
+        this.personajes_path = IMAGE_PATH + PERSONAJES_PATH;
+        
+        for (let i = 0; i < PERSONAJES_POSES.length; i++) {
+
+            let imagePath = this.personajes_path + persoanje + "/" + persoanje + PERSONAJES_POSES[i] + FORMATO_IMAGEN;
+            this.verificar_y_cargar_imagen(this.get_img_name(persoanje) + PERSONAJES_POSES[i], imagePath);
+        }
+    }
+
+    verificar_y_cargar_imagen(key, url) {
+        fetch(url, { method: 'HEAD' })
+            .then(response => {
+                if (response.ok) {
+                    this.load.image(key, url);
+                } else {
+                    console.warn(`La imagen no existe: ${url}`);
                 }
-            }
+            })
+            .catch(error => {
+                console.error(`Error al verificar la imagen: ${url}`, error);
+            });
+    }
+
+    get_img_name(name) {
+        switch (name) {
+            case PROTA:
+                return IMAGE_PROTA;
+            case VERONICA:
+                return IMAGE_VERONICA;
+            default:
+                return null;
         }
     }
 }
