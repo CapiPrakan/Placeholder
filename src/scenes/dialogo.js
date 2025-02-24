@@ -13,6 +13,7 @@ class Dialogo extends Phaser.Scene {
 
     init(texto) {
         // inicializar variables
+        this.texto_finalizado = false;
         this.nombre_dialogo = texto;
         this.dialogo_data = this.cache.json.get(JSON_DIALOGO).Dialogo;
     }
@@ -42,6 +43,9 @@ class Dialogo extends Phaser.Scene {
         let personaje_x = this.cuadro_dialogo.x - this.cuadro_dialogo.width / 4 - 50;
         let personaje_y = this.cuadro_dialogo.y - this.cuadro_dialogo.height / 2;
         this.personaje = new Personaje(this, personaje_x, personaje_y, this.dialogo_data[this.nombre_dialogo]['npc'], this.dialogo_data[this.nombre_dialogo]['pose']);
+
+        // Agrega un evento de clic al objeto input de la escena
+        this.input.on('pointerdown', this.onClick, this);
     }
 
     // función asíncrona que añade los botones de diálogo
@@ -70,6 +74,8 @@ class Dialogo extends Phaser.Scene {
             // actualizar posición
             pos_y -= this.botons[i - 1].height;
         }
+
+        this.texto_finalizado = true;
     }
     
     // función que devuelve una Promesa que espera al evento EVENT_TEXTO_DIALOGO
@@ -79,6 +85,23 @@ class Dialogo extends Phaser.Scene {
                 resolve();
             });
         });
+    }
+
+    onClick() {
+        if (!this.texto_finalizado && this.dialogo_data[this.nombre_dialogo]['opciones']) {
+            if (this.dialogo_data[this.nombre_dialogo]['opcion_1'] == "FIN") {
+                this.scene.stop();
+            }
+            this.cuadro_dialogo.actualizar_texto(this.dialogo_data[this.nombre_dialogo]['opcion_1']);
+        } else {
+            if (!this.cuadro_dialogo.texto_finnished) {
+                this.cuadro_dialogo.stop_animation();
+            } else {
+                if (this.botons.length > 0) {
+                    this.botons[this.botons.length - 1].stop_animation();
+                }
+            }
+        }
     }
 }
 

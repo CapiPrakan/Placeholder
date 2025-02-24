@@ -1,7 +1,7 @@
 import { EVENT_TEXTO_DIALOGO } from "../data/events_data";
 
 class TextoDialogo extends Phaser.GameObjects.Text {
-    constructor(scene, cuadro_dialogo_width, x, y, texto, botones, opciones = {}) {
+    constructor(scene, parent, cuadro_dialogo_width, x, y, texto, botones, opciones = {}) {
 
         // opciones por defecto para el Text
         let opcionesPorDefecto = {
@@ -19,6 +19,10 @@ class TextoDialogo extends Phaser.GameObjects.Text {
         // llamar al constructor de Text
         super(scene, x, y, "", opciones);
 
+        this.parent = parent;
+        this.texto = texto;
+        this.playing_animation = true;
+
         // ajustar el origen (centrado)
         this.setOrigin(0, 0);
 
@@ -34,15 +38,20 @@ class TextoDialogo extends Phaser.GameObjects.Text {
         scene.add.existing(this);
 
         // mostrar el texto con animación
-        this.actualizarTexto(texto);
+        this.actualizar_texto(texto);
     }
 
     init() {
     }
 
     // método para actualizar el texto con animación
-    actualizarTexto(nuevoTexto) {
+    actualizar_texto(nuevoTexto) {
         this.animacion_texto(nuevoTexto);
+    }
+
+    stop_animation() {
+        this.playing_animation = false;
+        this.setText(this.texto);
     }
 
     // método para animar el texto tipo máquina de escribir con colores aleatorios
@@ -53,18 +62,21 @@ class TextoDialogo extends Phaser.GameObjects.Text {
 
         setTimeout(() => {
             let intervalo = setInterval(() => {
+                if (!this.playing_animation) {
+                    clearInterval(intervalo);
+                    return;
+                }
                 texto_animado += texto_completo[i];
                 this.setText(texto_animado);
                 i++;
                 if (i === texto_completo.length) {
                     clearInterval(intervalo);
 
+                    this.parent.texto_finnished = true;
                     this.scene.events.emit(EVENT_TEXTO_DIALOGO);
                 }
             }, 50);
         }, 150);
-
-        
     }
 }
 

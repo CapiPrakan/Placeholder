@@ -5,6 +5,8 @@ class BotonDialogo extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, type, name, texto) {
         super(scene, x, y, type);
 
+        this.texto_finnished = false;
+
         // lo hacemos interactuable
         this.setInteractive();
 
@@ -37,7 +39,7 @@ class BotonDialogo extends Phaser.GameObjects.Sprite {
         this.x = this.x + this.width;
         
         // agragamos el texto al botón y lo centramos (izquierda, centro)
-        this.texto = new TextoDialogo(scene, this.width - 10, x - this.width / 2, y, texto, true, {}).setOrigin(0, 0.5);
+        this.texto = new TextoDialogo(scene, this, this.width - 10, x - this.width / 2, y, texto, true, {}).setOrigin(0, 0.5);
     }
     
 
@@ -58,6 +60,14 @@ class BotonDialogo extends Phaser.GameObjects.Sprite {
         this.on("pointerout", () => {
             this.clearTint();
         });
+    }
+
+    actualizar_texto(texto) {
+        this.texto.actualizar_texto(texto);
+    }
+
+    stop_animation() {
+        this.texto.stop_animation();
     }
 }
 
