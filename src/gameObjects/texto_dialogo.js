@@ -1,4 +1,4 @@
-import { EVENT_TEXTO_DIALOGO, EVENT_SKIP_TEXTO_DIALOGO, EVENT_NEXT_TEXTO_DIALOGO2 } from "../data/events_data";
+import { EVENT_TEXTO_DIALOGO, EVENT_SKIP_TEXTO_DIALOGO } from "../data/events_data";
 
 class TextoDialogo extends Phaser.GameObjects.Text {
     constructor(scene, parent, cuadro_dialogo_width, x, y, texto, botones, skip_annimation, opciones = {}) {

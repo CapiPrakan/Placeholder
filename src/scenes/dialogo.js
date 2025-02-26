@@ -4,16 +4,20 @@ import {
     IMAGE_BOTON_DIALOGO, IMAGE_BOTON_DIALOGO_PATH, JSON_DIALOGO, IMAGE_PROTA, 
     IMAGE_VERONICA, PERSONAJES_POSES 
 } from '/src/data/assets_data.ts';
-import { EVENT_TEXTO_DIALOGO, EVENT_SKIP_TEXTO_DIALOGO, EVENT_NEXT_TEXTO_DIALOGO, EVENT_NEXT_TEXTO_DIALOGO2} from '/src/data/events_data.ts';
+import { EVENT_TEXTO_DIALOGO, EVENT_SKIP_TEXTO_DIALOGO, EVENT_NEXT_TEXTO_DIALOGO} from '/src/data/events_data.ts';
 import { PERSONAJES, PERSONAJES_PATH, PROTA, VERONICA } from '/src/data/npc_data.ts';
+import { BACKGROUNDS, BACKGROUND_PATH, CLASE, SALON } from '/src/data/background_data.ts';
 
 import CuadroDialogo from "/src/gameObjects/cuadrado_dialogo.js";
 import BotonDialogo from "/src/gameObjects/boton_dialogo.js";
 import Personaje from "/src/gameObjects/personaje.js";
+import AssetsData from '../data/assets_data.js';
 
 class Dialogo extends Phaser.Scene {
     constructor() {
         super({ key: SCENE_DIALOGO, active: false });
+
+        this.assets_data = new AssetsData(this);
     }
 
     init(texto) {
@@ -27,12 +31,15 @@ class Dialogo extends Phaser.Scene {
 
     preload() {
         // carga de imágenes
-        this.load.image(IMAGE_CUADRADO_DIALOGO, IMAGE_CUADRADO_DIALOGO_PATH);
-        this.load.image(IMAGE_BOTON_DIALOGO, IMAGE_BOTON_DIALOGO_PATH);
+        // this.load.image(IMAGE_CUADRADO_DIALOGO, IMAGE_CUADRADO_DIALOGO_PATH);
+        // this.load.image(IMAGE_BOTON_DIALOGO, IMAGE_BOTON_DIALOGO_PATH);
         
-        for (let i = 0; i < PERSONAJES.length; i++) {
-            this.cargar_personajes(PERSONAJES[i]);
-        }
+        // for (let i = 0; i < PERSONAJES.length; i++) {
+        //     this.cargar_personajes(PERSONAJES[i]);
+        // }
+
+        this.assets_data.cargar_personajes()
+        this.assets_data.cargar_dialogos()
 
         setTimeout(() => {
             this.can_be_clicked = true;
@@ -147,7 +154,7 @@ class Dialogo extends Phaser.Scene {
         this.personaje.actualizar_npc(this.dialogo_data[this.nombre_dialogo]['npc'], this.dialogo_data[this.nombre_dialogo]['pose']);
     }
 
-    cargar_personajes(persoanje) {
+    cargar_backgrounds(background) {
         this.personajes_path = IMAGE_PATH + PERSONAJES_PATH;
         
         for (let i = 0; i < PERSONAJES_POSES.length; i++) {
@@ -169,17 +176,6 @@ class Dialogo extends Phaser.Scene {
             .catch(error => {
                 console.error(`Error al verificar la imagen: ${url}`, error);
             });
-    }
-
-    get_img_name(name) {
-        switch (name) {
-            case PROTA:
-                return IMAGE_PROTA;
-            case VERONICA:
-                return IMAGE_VERONICA;
-            default:
-                return null;
-        }
     }
 }
 
