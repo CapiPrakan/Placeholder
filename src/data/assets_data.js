@@ -9,26 +9,64 @@ class AssetsData {
         this.IMG_PREFIX = "img_";
         this.FORMATO_IMAGEN = ".png";
 
+        this.JSON_PREFIX = "json_";
+        this.FORMATO_JSON = ".json";
+
         // los paths principales para cada asset
         this.IMAGE_PATH = ASSETS_PATH + "img/";
         this.JSON_PATH = ASSETS_PATH + "json/";
 
+        this.inicializar_constantes_dialogos();
     }
 
+    inicializar_constantes_dialogos() {
+        // dialogo
+        this.JSON_DIALOGO = "dialogo";
+        this.JSON_DIALOGO_PATH =  this.JSON_PATH + this.JSON_DIALOGO + this.FORMATO_JSON;
+    }
+
+    // carga los dialogos (json)
     cargar_dialogos() {
+        this._cargar_json(this.JSON_PREFIX + this.JSON_DIALOGO, this.JSON_DIALOGO_PATH)
+    }
+
+    get_json_dialogo() {
+        return this.JSON_PREFIX + this.JSON_DIALOGO;
+    }
+
+    get_json_dialogo_path() {
+        this.JSON_DIALOGO_PATH;
+    }
+
+    cargar_img_dialogos() {
+        // path de los dialogos
         let DIALOGOS_PATH = this.IMAGE_PATH + "dialogos/";
 
-        let CUADRADO_DIALOGO = "cuadrado_dialogo";
-        this.IMAGE_CUADRADO_DIALOGO_PATH = DIALOGOS_PATH + CUADRADO_DIALOGO + this.FORMATO_IMAGEN;
+        // cuadrado_dialogo
+        this.CUADRADO_DIALOGO = "cuadrado_dialogo";
+        this.IMAGE_CUADRADO_DIALOGO_PATH = DIALOGOS_PATH + this.CUADRADO_DIALOGO + this.FORMATO_IMAGEN;
 
-        let BOTON_DIALOGO = "boton_dialogo";
-        this.IMAGE_BOTON_DIALOGO_PATH = DIALOGOS_PATH + BOTON_DIALOGO + this.FORMATO_IMAGEN;
+        // boton_dialogo
+        this.BOTON_DIALOGO = "boton_dialogo";
+        this.IMAGE_BOTON_DIALOGO_PATH = DIALOGOS_PATH + this.BOTON_DIALOGO + this.FORMATO_IMAGEN;
 
-        console.log("cuadro: ", this.IMG_PREFIX + CUADRADO_DIALOGO);
-        console.log("boton: ", this.IMG_PREFIX + BOTON_DIALOGO);
+        // cargamos los assets
+        this._cargar_imagen(this.IMG_PREFIX + this.CUADRADO_DIALOGO, this.IMAGE_CUADRADO_DIALOGO_PATH)
+        this._cargar_imagen(this.IMG_PREFIX + this.BOTON_DIALOGO, this.IMAGE_BOTON_DIALOGO_PATH)
+    }
 
-        this._verificar_y_cargar_imagen(this.IMG_PREFIX + CUADRADO_DIALOGO, this.IMAGE_CUADRADO_DIALOGO_PATH)
-        this._verificar_y_cargar_imagen(this.IMG_PREFIX + BOTON_DIALOGO, this.IMAGE_BOTON_DIALOGO_PATH)
+    get_cuadrado_dialogo() {
+        return this.IMG_PREFIX + this.CUADRADO_DIALOGO;
+    }
+    get_cuadrado_dialogo_path() {
+        return this.IMAGE_CUADRADO_DIALOGO_PATH;
+    }
+
+    get_boton_dialogo() {
+        return this.IMG_PREFIX + this.BOTON_DIALOGO;
+    }
+    get_boton_dialogo_path() {
+        return this.IMAGE_BOTON_DIALOGO_PATH;
     }
 
     // carga los personajes
@@ -64,7 +102,7 @@ class AssetsData {
         Object.entries(this.PERSONAJE_DIC).forEach(([key, value]) => {
             for (let i = 0; i < PERSONAJES_POSES.length; i++) {
                 let imagePath = PERSONAJES_PATH + key + "/" + key + "_" + PERSONAJES_POSES[i] + this.FORMATO_IMAGEN;
-                this._verificar_y_cargar_imagen(value + "_" + PERSONAJES_POSES[i], imagePath);
+                this._cargar_imagen(value + "_" + PERSONAJES_POSES[i], imagePath);
             } 
         });
     }
@@ -87,8 +125,12 @@ class AssetsData {
         ]
     }
 
-    _verificar_y_cargar_imagen(key, url) {
+    _cargar_imagen(key, url) {
         this.scene.load.image(key, url);
+    }
+
+    _cargar_json(key, url) {
+        this.scene.load.json(key, url);
     }
 }
 

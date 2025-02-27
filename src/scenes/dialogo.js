@@ -1,7 +1,6 @@
 import { SCENE_DIALOGO } from '/src/data/scene_data.ts';
 import { 
-    IMAGE_PATH, FORMATO_IMAGEN, IMAGE_CUADRADO_DIALOGO, IMAGE_CUADRADO_DIALOGO_PATH, 
-    IMAGE_BOTON_DIALOGO, IMAGE_BOTON_DIALOGO_PATH, JSON_DIALOGO, IMAGE_PROTA, 
+    IMAGE_PATH, FORMATO_IMAGEN, IMAGE_PROTA, 
     IMAGE_VERONICA, PERSONAJES_POSES 
 } from '/src/data/assets_data.ts';
 import { EVENT_TEXTO_DIALOGO, EVENT_SKIP_TEXTO_DIALOGO, EVENT_NEXT_TEXTO_DIALOGO} from '/src/data/events_data.ts';
@@ -24,22 +23,15 @@ class Dialogo extends Phaser.Scene {
         // inicializar variables
         this.texto_finalizado = false;
         this.nombre_dialogo = texto;
-        this.dialogo_data = this.cache.json.get(JSON_DIALOGO).Dialogo;
+        console.log(this.assets_data.get_json_dialogo());
+        this.dialogo_data = this.cache.json.get(this.assets_data.get_json_dialogo()).Dialogo;
         this.skip_animation = false;
         this.can_be_clicked = false;
     }
 
     preload() {
-        // carga de imágenes
-        // this.load.image(IMAGE_CUADRADO_DIALOGO, IMAGE_CUADRADO_DIALOGO_PATH);
-        // this.load.image(IMAGE_BOTON_DIALOGO, IMAGE_BOTON_DIALOGO_PATH);
-        
-        // for (let i = 0; i < PERSONAJES.length; i++) {
-        //     this.cargar_personajes(PERSONAJES[i]);
-        // }
-
         this.assets_data.cargar_personajes()
-        this.assets_data.cargar_dialogos()
+        this.assets_data.cargar_img_dialogos()
 
         setTimeout(() => {
             this.can_be_clicked = true;
@@ -52,7 +44,7 @@ class Dialogo extends Phaser.Scene {
         this.height = this.sys.game.config.height;
 
         // Cuadro de diálogo
-        this.cuadro_dialogo = new CuadroDialogo(this, this.width / 2, this.height - 150, IMAGE_CUADRADO_DIALOGO, this.dialogo_data[this.nombre_dialogo]['texto'], false);
+        this.cuadro_dialogo = new CuadroDialogo(this, this.width / 2, this.height - 150, this.assets_data.get_cuadrado_dialogo(), this.dialogo_data[this.nombre_dialogo]['texto'], false);
 
         // Capturar tecla de espacio
         this.cursor = this.input.keyboard.createCursorKeys();
@@ -87,7 +79,7 @@ class Dialogo extends Phaser.Scene {
 
             // crear el botón
             this.botons[i] = new BotonDialogo(
-                this, pos_x, pos_y, IMAGE_BOTON_DIALOGO, 
+                this, pos_x, pos_y, this.assets_data.get_boton_dialogo(), 
                 this.dialogo_data[this.nombre_dialogo]['opcion_' + String(i + 1)], 
                 this.dialogo_data[this.nombre_dialogo]['texto_' + String(i + 1)],
                 this.skip_animation
