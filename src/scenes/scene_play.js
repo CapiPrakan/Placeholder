@@ -1,4 +1,6 @@
 import { SCENE_PLAY, SCENE_DIALOGO } from '/src/data/scene_data.ts';
+import { EVENT_DATOS_CARAGDOS } from "/src/data/events_data.ts";
+
 import AssetsData from '../data/assets_data';
 
 // esta escena de momento solo lanza la escena de dialogo
@@ -9,7 +11,12 @@ class ScenePlay extends Phaser.Scene {
     }
 
     preload() {
-        this.assets_data.cargar_dialogos();
+        // Cargar datos y esperar a que se emita la señal EVENT_DATOS_CARAGDOS
+        this.assets_data.cargar_datos();
+
+        this.events.once(EVENT_DATOS_CARAGDOS, () => {
+            this.assets_data.cargar_dialogos();
+        });
     }
 
     create() {

@@ -23,7 +23,6 @@ class Dialogo extends Phaser.Scene {
         // inicializar variables
         this.texto_finalizado = false;
         this.nombre_dialogo = texto;
-        console.log(this.assets_data.get_json_dialogo());
         this.dialogo_data = this.cache.json.get(this.assets_data.get_json_dialogo()).Dialogo;
         this.skip_animation = false;
         this.can_be_clicked = false;

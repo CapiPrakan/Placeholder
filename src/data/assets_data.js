@@ -1,6 +1,23 @@
+import { EVENT_DATOS_CARAGDOS } from "/src/data/events_data.ts";
+
 class AssetsData {
     constructor(scene) {
         this.scene = scene;
+
+        // datos json
+        this.ASSETS = "Assets";
+
+        this.PATH = "Path";
+        this.PREFIX = "Prefix";
+        this.EXTENSION = "Extension";
+
+        this.IMAGES = "Images";
+        this.JSON = "Json";
+
+        this.DIALOGOS = "Dialogos";
+
+        this.PERSONAJES = "Personajes";
+        this.POSES = "Poses";
 
         // el main path
         let ASSETS_PATH = "/assets/"
@@ -16,18 +33,49 @@ class AssetsData {
         this.IMAGE_PATH = ASSETS_PATH + "img/";
         this.JSON_PATH = ASSETS_PATH + "json/";
 
+        this.inicializar_constantes_datos();
         this.inicializar_constantes_dialogos();
+    }
+
+    inicializar_constantes_datos() {
+        // datos
+        this.JSON_DATO = "data";
+        this.JSON_DATO_PATH =  this.JSON_PATH + this.JSON_DATO + this.FORMATO_JSON;
+    }
+    
+    // carga los datos (json)
+    cargar_datos() {
+        this.scene.load.json(this.JSON_PREFIX + this.JSON_DATO, this.JSON_DATO_PATH)
+        
+        // Agrega un evento 'filecomplete' para el JSON
+        this.scene.load.once(`filecomplete-json-${this.JSON_PREFIX + this.JSON_DATO}`, () => {
+            this.datos = this.scene.cache.json.get(this.JSON_PREFIX + this.JSON_DATO);
+            this.datos_assets = this.datos.Assets;
+
+            this.scene.events.emit(EVENT_DATOS_CARAGDOS);
+        });
+
+        // Inicia la carga de los datos
+        this.scene.load.start();
+    }
+
+    get_json_dato() {
+        return this.JSON_PREFIX + this.JSON_DATO;
+    }
+
+    // carga los dialogos (json)
+    cargar_dialogos() {
+        this.json_dialogo = this.datos_assets[this.JSON][this.PREFIX] + this.datos_assets[this.JSON][this.DIALOGOS]
+
+        this.json_dialogo_path = this.datos_assets[this.JSON][this.PATH] + this.datos_assets[this.JSON][this.DIALOGOS] + this.datos_assets[this.JSON][this.EXTENSION]
+
+        this.scene.load.json(this.json_dialogo, this.json_dialogo_path);
     }
 
     inicializar_constantes_dialogos() {
         // dialogo
         this.JSON_DIALOGO = "dialogo";
         this.JSON_DIALOGO_PATH =  this.JSON_PATH + this.JSON_DIALOGO + this.FORMATO_JSON;
-    }
-
-    // carga los dialogos (json)
-    cargar_dialogos() {
-        this._cargar_json(this.JSON_PREFIX + this.JSON_DIALOGO, this.JSON_DIALOGO_PATH)
     }
 
     get_json_dialogo() {
@@ -127,10 +175,6 @@ class AssetsData {
 
     _cargar_imagen(key, url) {
         this.scene.load.image(key, url);
-    }
-
-    _cargar_json(key, url) {
-        this.scene.load.json(key, url);
     }
 }
 

@@ -1,0 +1,37 @@
+{
+    "Assets": {
+        "Path": "/assets/",
+        "Images": {
+            "Path": "/assets/images/",
+            "Prefix": "img_",
+            "Extension": ".png",
+
+            "Dialogos": {
+                "CuadroDialogo": "cuadro_dialogo",
+                "BotonDialogo": "boton_dialogo"
+            },
+            "Personajes": {
+                "Path": "/assets/images/personajes/",
+
+                "Personajes": [
+                    "prota",
+                    "veronica"
+                ],
+
+                "Poses": [
+                    "normal",
+                    "alegre",
+                    "triste",
+                    "enfado"
+                ]
+            }
+        },
+        "Json": {
+            "Path": "/assets/json/",
+            "Prefix": "json_",
+            "Extension": ".json",
+
+            "Dialogos": "dialogo"
+        }
+    }
+}
