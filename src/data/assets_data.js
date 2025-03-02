@@ -1,10 +1,13 @@
 import { EVENT_DATOS_CARAGDOS } from "/src/data/events_data.ts";
 
+// ------------------------------------------------------------- //
+//   esta función se encarga de cargar los datos de los assets   //
+// ------------------------------------------------------------- //
 class AssetsData {
     constructor(scene) {
         this.scene = scene;
 
-        // datos json
+        // estos parametros corresponden a los nombres de las keys en el json
         this.ASSETS = "Assets";
 
         this.PATH = "Path";
@@ -19,8 +22,7 @@ class AssetsData {
         this.PERSONAJES = "Personajes";
         this.POSES = "Poses";
 
-        // el main path
-        let ASSETS_PATH = "/assets/"
+        this.BACKGROUNDS = "Backgrounds";
 
         // prefijos y formatos
         this.IMG_PREFIX = "img_";
@@ -29,9 +31,8 @@ class AssetsData {
         this.JSON_PREFIX = "json_";
         this.FORMATO_JSON = ".json";
 
-        // los paths principales para cada asset
-        this.IMAGE_PATH = ASSETS_PATH + "img/";
-        this.JSON_PATH = ASSETS_PATH + "json/";
+        // el path principal para descargar el json
+        this.JSON_PATH = "/assets/json/";
 
         this.inicializar_constantes_datos();
         this.inicializar_constantes_dialogos();
@@ -59,6 +60,14 @@ class AssetsData {
         this.scene.load.start();
     }
 
+    // vuelve a hacer load del dato
+    recargar_datos() {
+        this.datos = this.scene.cache.json.get(this.JSON_PREFIX + this.JSON_DATO);
+        if (this.datos) {
+            this.datos_assets = this.datos.Assets;
+        }
+    }
+    
     get_json_dato() {
         return this.JSON_PREFIX + this.JSON_DATO;
     }
@@ -88,89 +97,63 @@ class AssetsData {
 
     cargar_img_dialogos() {
         // path de los dialogos
-        let DIALOGOS_PATH = this.IMAGE_PATH + "dialogos/";
+        let DIALOGOS_PATH = this.datos_assets[this.IMAGES][this.DIALOGOS][this.PATH];
 
         // cuadrado_dialogo
-        this.CUADRADO_DIALOGO = "cuadrado_dialogo";
-        this.IMAGE_CUADRADO_DIALOGO_PATH = DIALOGOS_PATH + this.CUADRADO_DIALOGO + this.FORMATO_IMAGEN;
+        this.CUADRADO_DIALOGO = this.datos_assets[this.IMAGES][this.DIALOGOS].CuadradoDialogo;
 
         // boton_dialogo
-        this.BOTON_DIALOGO = "boton_dialogo";
-        this.IMAGE_BOTON_DIALOGO_PATH = DIALOGOS_PATH + this.BOTON_DIALOGO + this.FORMATO_IMAGEN;
+        this.BOTON_DIALOGO = this.datos_assets[this.IMAGES][this.DIALOGOS].BotonDialogo;
 
         // cargamos los assets
-        this._cargar_imagen(this.IMG_PREFIX + this.CUADRADO_DIALOGO, this.IMAGE_CUADRADO_DIALOGO_PATH)
-        this._cargar_imagen(this.IMG_PREFIX + this.BOTON_DIALOGO, this.IMAGE_BOTON_DIALOGO_PATH)
+        this._cargar_imagen(this.IMG_PREFIX + this.CUADRADO_DIALOGO, DIALOGOS_PATH + this.CUADRADO_DIALOGO + this.FORMATO_IMAGEN)
+        this._cargar_imagen(this.IMG_PREFIX + this.BOTON_DIALOGO, DIALOGOS_PATH + this.BOTON_DIALOGO + this.FORMATO_IMAGEN)
     }
 
     get_cuadrado_dialogo() {
         return this.IMG_PREFIX + this.CUADRADO_DIALOGO;
     }
-    get_cuadrado_dialogo_path() {
-        return this.IMAGE_CUADRADO_DIALOGO_PATH;
-    }
 
     get_boton_dialogo() {
         return this.IMG_PREFIX + this.BOTON_DIALOGO;
     }
-    get_boton_dialogo_path() {
-        return this.IMAGE_BOTON_DIALOGO_PATH;
-    }
 
     // carga los personajes
     cargar_personajes() {
-        // path del persoanje
-        let PERSONAJES_PATH = this.IMAGE_PATH + "personajes/";
+        let PERSONAJES_PATH = this.datos_assets[this.IMAGES][this.PERSONAJES][this.PATH];
 
-        // PASOS A SEGUIR:
-        // ----------------------------------
-        // 1. agregar / quitar las poses
-        // 2. agregar / quitar los personajes
-        // 3. añadir o quitar los personajes al diccionario
-        // ----------------------------------
-
-        // 1. EDIT - agregar o quitar las poses que añadamos o quitemos
-        let PERSONAJES_POSES = [
-            "normal",
-            "triste",
-            "enfado",
-            "alegre",
-        ]
+      
+        let PERSONAJES_POSES = this.datos_assets[this.IMAGES][this.PERSONAJES][this.POSES];
+        let PERSONAJES = this.datos_assets[this.IMAGES][this.PERSONAJES][this.PERSONAJES];
         
-        // 2. EDIT - agregar o quitar los personajes
-        this.PROTA = "prota"
-        this.VERONICA = "veronica"
+        for (let i = 0; i < PERSONAJES.length; i++) {
+            for (let j = 0; j < PERSONAJES_POSES.length; j++) {
+                let img_name = PERSONAJES[i] + "_" + PERSONAJES_POSES[j]
+                let imagePath = PERSONAJES_PATH + PERSONAJES[i] + "/" + img_name + this.FORMATO_IMAGEN;
+                this._cargar_imagen(this.IMG_PREFIX + img_name, imagePath);
+            }
+        }
+    }
 
-        this.PERSONAJE_DIC = { }
-
-        // 3. EDIT - añadiro quitar los personajes al diccionario
-        this.PERSONAJE_DIC[this.PROTA] = this.IMG_PREFIX + this.PROTA;
-        this.PERSONAJE_DIC[this.VERONICA] = this.IMG_PREFIX + this.VERONICA;
-       
-        Object.entries(this.PERSONAJE_DIC).forEach(([key, value]) => {
-            for (let i = 0; i < PERSONAJES_POSES.length; i++) {
-                let imagePath = PERSONAJES_PATH + key + "/" + key + "_" + PERSONAJES_POSES[i] + this.FORMATO_IMAGEN;
-                this._cargar_imagen(value + "_" + PERSONAJES_POSES[i], imagePath);
-            } 
-        });
+    get_personaje(persoanje, pose) {
+        return this.IMG_PREFIX + persoanje + "_" + pose;
     }
 
     // carga los fondos
-    cargar_fondos() {
-        // path de los fondos
-        this.BACKGROUND_PATH = this.IMAGE_PATH + "backgrounds/";
-        
-        // PASOS A SEGUIR:
-        // ----------------------------------
-        // 1. agregar / quitar los fondos
-        // 2. añadir o quitar los fondos al diccionario
-        // ----------------------------------
+    cargar_backgrounds() {
+        let BACKGROUND_PATH = this.datos_assets[this.IMAGES][this.BACKGROUNDS][this.PATH];
 
-        // 1. EDIT - agregar o quitar los fondos
-        let FONDOS = [
-            "clase",
-            "salon"
-        ]
+      
+        let BACKGROUNDS = this.datos_assets[this.IMAGES][this.BACKGROUNDS][this.BACKGROUNDS];
+        
+        for (let i = 0; i < BACKGROUNDS.length; i++) {
+            let imagePath = BACKGROUND_PATH +  BACKGROUNDS[i] + this.FORMATO_IMAGEN;
+            this._cargar_imagen(this.IMG_PREFIX + BACKGROUNDS[i], imagePath);
+        }
+    }
+
+    get_background(background) {
+        return this.IMG_PREFIX + background;
     }
 
     _cargar_imagen(key, url) {

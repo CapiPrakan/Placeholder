@@ -1,16 +1,11 @@
 import { SCENE_DIALOGO } from '/src/data/scene_data.ts';
-import { 
-    IMAGE_PATH, FORMATO_IMAGEN, IMAGE_PROTA, 
-    IMAGE_VERONICA, PERSONAJES_POSES 
-} from '/src/data/assets_data.ts';
 import { EVENT_TEXTO_DIALOGO, EVENT_SKIP_TEXTO_DIALOGO, EVENT_NEXT_TEXTO_DIALOGO} from '/src/data/events_data.ts';
-import { PERSONAJES, PERSONAJES_PATH, PROTA, VERONICA } from '/src/data/npc_data.ts';
-import { BACKGROUNDS, BACKGROUND_PATH, CLASE, SALON } from '/src/data/background_data.ts';
 
-import CuadroDialogo from "/src/gameObjects/cuadrado_dialogo.js";
-import BotonDialogo from "/src/gameObjects/boton_dialogo.js";
-import Personaje from "/src/gameObjects/personaje.js";
-import AssetsData from '../data/assets_data.js';
+import CuadroDialogo from "/src/gameObjects/dialogos/cuadrado_dialogo.js";
+import BotonDialogo from "/src/gameObjects/dialogos/boton_dialogo.js";
+import Personaje from "/src/gameObjects/dialogos/personaje.js";
+import BackgroundDialogo from '/src/gameObjects/dialogos/background_dialogo.js';
+import AssetsData from '/src/data/assets_data.js';
 
 class Dialogo extends Phaser.Scene {
     constructor() {
@@ -29,8 +24,11 @@ class Dialogo extends Phaser.Scene {
     }
 
     preload() {
-        this.assets_data.cargar_personajes()
-        this.assets_data.cargar_img_dialogos()
+        // cargar los assets
+        this.assets_data.recargar_datos();
+        this.assets_data.cargar_img_dialogos();
+        this.assets_data.cargar_personajes();
+        this.assets_data.cargar_backgrounds();
 
         setTimeout(() => {
             this.can_be_clicked = true;
@@ -42,20 +40,21 @@ class Dialogo extends Phaser.Scene {
         this.width = this.sys.game.config.width;
         this.height = this.sys.game.config.height;
 
+        this.background = new BackgroundDialogo(this, 0, 0, this.assets_data.get_background(this.dialogo_data[this.nombre_dialogo]['fondo']));
+
         // Cuadro de diálogo
         this.cuadro_dialogo = new CuadroDialogo(this, this.width / 2, this.height - 150, this.assets_data.get_cuadrado_dialogo(), this.dialogo_data[this.nombre_dialogo]['texto'], false);
-
+        
         // Capturar tecla de espacio
         this.cursor = this.input.keyboard.createCursorKeys();
 
         // añade los botones, en caso de que haya opciones
-        if (this.dialogo_data[this.nombre_dialogo]['opciones'] == true) {
-            this.añadir_botones();
-        }
+        this.añadir_botones();
 
         let personaje_x = this.cuadro_dialogo.x - this.cuadro_dialogo.width / 4 - 50;
         let personaje_y = this.cuadro_dialogo.y - this.cuadro_dialogo.height / 2;
-        this.personaje = new Personaje(this, personaje_x, personaje_y, this.dialogo_data[this.nombre_dialogo]['npc'], this.dialogo_data[this.nombre_dialogo]['pose']);
+        let img_name = this.assets_data.get_personaje(this.dialogo_data[this.nombre_dialogo]['npc'], this.dialogo_data[this.nombre_dialogo]['pose']);
+        this.personaje = new Personaje(this, personaje_x, personaje_y, img_name);
 
         // Agrega un evento de clic al objeto input de la escena
         this.input.on('pointerdown', this.on_click, this);
@@ -69,12 +68,12 @@ class Dialogo extends Phaser.Scene {
         let pos_y = this.height - this.cuadro_dialogo.height - 83;
         this.botons = [];
 
-        // mientras haya opciones
-        while (this.dialogo_data[this.nombre_dialogo]['opcion_' + String(i + 1)] != null) {
+        // esperar a que el evento 'EVENT_TEXTO_DIALOGO' ocurra
+        if (!this.skip_animation)
+            await this.esperar_evento(EVENT_TEXTO_DIALOGO);
 
-            // esperar a que el evento 'EVENT_TEXTO_DIALOGO' ocurra
-            if (!this.skip_animation)
-                await this.esperar_evento(EVENT_TEXTO_DIALOGO);
+        // mientras haya opciones
+        while (this.dialogo_data[this.nombre_dialogo]["opciones"] && this.dialogo_data[this.nombre_dialogo]['opcion_' + String(i + 1)] != null) {
 
             // crear el botón
             this.botons[i] = new BotonDialogo(
@@ -89,9 +88,19 @@ class Dialogo extends Phaser.Scene {
 
             // actualizar posición
             pos_y -= this.botons[i - 1].height;
+
+            // esperar a que el evento 'EVENT_TEXTO_DIALOGO' ocurra
+            if (!this.skip_animation)
+                await this.esperar_evento(EVENT_TEXTO_DIALOGO);
         }
 
-        this.texto_finalizado = true;
+        if (this.botons.length == 0) {
+            setTimeout(() => {
+                this.texto_finalizado = true;
+            }, 100);
+        } else {
+            this.texto_finalizado = true;
+        }
 
         if (!this.skip_animation)
             await this.esperar_evento(EVENT_TEXTO_DIALOGO);
@@ -112,20 +121,25 @@ class Dialogo extends Phaser.Scene {
 
     on_click() {
         if (!this.can_be_clicked) return;
+        console.log(this.dialogo_data[this.nombre_dialogo]['opciones']);   
         if (this.texto_finalizado && !this.dialogo_data[this.nombre_dialogo]['opciones']) {
+            console.log("Texto finalizado");
             if (this.dialogo_data[this.nombre_dialogo]['opcion_1'] == "FIN") {
                 this.scene.stop();
+                return;
             }
             this.events.emit(EVENT_NEXT_TEXTO_DIALOGO, this.dialogo_data[this.nombre_dialogo]['opcion_1']);
         } else if (!this.cuadro_dialogo.texto_finnished) {
-                this.skip_animation = true;
-                this.events.emit(EVENT_SKIP_TEXTO_DIALOGO);
+            this.skip_animation = true;
+            this.events.emit(EVENT_SKIP_TEXTO_DIALOGO);
         } else if (this.botons.length > 0 && !this.botons[this.botons.length - 1].texto_finnished) {
+            this.botons[this.botons.length - 1].texto_finnished = true;
             this.skip_animation = true;
             this.events.emit(EVENT_SKIP_TEXTO_DIALOGO);
         }
     }
 
+    // al cambiar de diálogo
     on_next_dialogo_text(name) {
         for (let i = 0; i < this.botons.length; i++) {
             this.botons[i].destroy();
@@ -134,39 +148,17 @@ class Dialogo extends Phaser.Scene {
         this.skip_animation = false;
         this.nombre_dialogo = name;
         this.texto_finalizado = false;
+        
+        this.background.change_texture(this.assets_data.get_background(this.dialogo_data[this.nombre_dialogo]['fondo']));
+
 
         this.cuadro_dialogo.actualizar_texto(this.dialogo_data[this.nombre_dialogo]['texto']);
 
          // añade los botones, en caso de que haya opciones
-        if (this.dialogo_data[this.nombre_dialogo]['opciones'] == true) {
-            this.añadir_botones();
-        }
+        this.añadir_botones();
 
-        this.personaje.actualizar_npc(this.dialogo_data[this.nombre_dialogo]['npc'], this.dialogo_data[this.nombre_dialogo]['pose']);
-    }
-
-    cargar_backgrounds(background) {
-        this.personajes_path = IMAGE_PATH + PERSONAJES_PATH;
-        
-        for (let i = 0; i < PERSONAJES_POSES.length; i++) {
-
-            let imagePath = this.personajes_path + persoanje + "/" + persoanje + PERSONAJES_POSES[i] + FORMATO_IMAGEN;
-            this.verificar_y_cargar_imagen(this.get_img_name(persoanje) + PERSONAJES_POSES[i], imagePath);
-        }
-    }
-
-    verificar_y_cargar_imagen(key, url) {
-        fetch(url, { method: 'HEAD' })
-            .then(response => {
-                if (response.ok) {
-                    this.load.image(key, url);
-                } else {
-                    console.warn(`La imagen no existe: ${url}`);
-                }
-            })
-            .catch(error => {
-                console.error(`Error al verificar la imagen: ${url}`, error);
-            });
+        let img_name = this.assets_data.get_personaje(this.dialogo_data[this.nombre_dialogo]['npc'], this.dialogo_data[this.nombre_dialogo]['pose']);
+        this.personaje.change_texture(img_name);
     }
 }
 

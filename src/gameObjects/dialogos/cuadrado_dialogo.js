@@ -1,5 +1,5 @@
-import TextoDialogo from "/src/gameObjects/texto_dialogo.js";
-import { EVENT_SKIP_TEXTO_DIALOGO } from "../data/events_data";
+import TextoDialogo from "/src/gameObjects/dialogos/texto_dialogo.js";
+// import { EVENT_SKIP_TEXTO_DIALOGO } from "../data/events_data";
 
 // cuadro de dialogo principal
 class CuadroDialogo extends Phaser.GameObjects.Sprite {
@@ -57,7 +57,9 @@ class CuadroDialogo extends Phaser.GameObjects.Sprite {
     }
 
     actualizar_texto(nuevoTexto) {
-        this.texto_dialogo.destroy();
+        if(this.texto_dialogo)  {
+            this.texto_dialogo.destroy();
+        }
         setTimeout(() => {
             this.texto_dialogo = new TextoDialogo(this.scene, this, this.width - 10, this.x - this.width / 2 + 20, this.y - this.height / 2 + 20, nuevoTexto, false, false, {});
         }, 10);

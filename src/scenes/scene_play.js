@@ -1,7 +1,7 @@
 import { SCENE_PLAY, SCENE_DIALOGO } from '/src/data/scene_data.ts';
 import { EVENT_DATOS_CARAGDOS } from "/src/data/events_data.ts";
 
-import AssetsData from '../data/assets_data';
+import AssetsData from '/src/data/assets_data.js';
 
 // esta escena de momento solo lanza la escena de dialogo
 class ScenePlay extends Phaser.Scene {

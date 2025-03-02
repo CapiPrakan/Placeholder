@@ -1,5 +1,5 @@
-import TextoDialogo from "/src/gameObjects/texto_dialogo.js";
-import { EVENT_SKIP_TEXTO_DIALOGO, EVENT_NEXT_TEXTO_DIALOGO } from "../data/events_data";
+import TextoDialogo from "/src/gameObjects/dialogos/texto_dialogo.js";
+import { EVENT_SKIP_TEXTO_DIALOGO, EVENT_NEXT_TEXTO_DIALOGO } from "/src/data/events_data.ts";
 
 // Es el botón que se muestra en el diálogo
 class BotonDialogo extends Phaser.GameObjects.Sprite {
@@ -24,6 +24,7 @@ class BotonDialogo extends Phaser.GameObjects.Sprite {
 
         this.x = x - this.width;
 
+        // animación de entrada
         if (!skip_annimation) {
             this.scaleX = 0;
             this.alpha = 0;
@@ -32,7 +33,7 @@ class BotonDialogo extends Phaser.GameObjects.Sprite {
                 targets: this,
                 scaleX: 1,
                 alpha: 1,
-                duration: 1000,
+                duration: 200,
                 ease: 'Power2',
                 onComplete: () => {
                     this.tween_finnish = true;
@@ -58,8 +59,12 @@ class BotonDialogo extends Phaser.GameObjects.Sprite {
                 this.tween_finnished(scene, x, y, texto, true);
             }
         }, this);
+
+        // cuadno se elimina el boton
+        this.on('destroy', this.beforeDestroy, this);
     }
 
+    // al terminar la animación
     tween_finnished(scene, x, y, texto, skip_annimation) {
         this.setOrigin(1, 0.5);
         this.x = this.x + this.width;
@@ -98,6 +103,11 @@ class BotonDialogo extends Phaser.GameObjects.Sprite {
 
     stop_animation() {
         this.texto.stop_animation();
+    }
+
+    // Función que se ejecuta antes de destruirse
+    beforeDestroy() {
+        this.texto.destroy();
     }
 }
 

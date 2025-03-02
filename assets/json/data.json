@@ -2,16 +2,18 @@
     "Assets": {
         "Path": "/assets/",
         "Images": {
-            "Path": "/assets/images/",
+            "Path": "/assets/img/",
             "Prefix": "img_",
             "Extension": ".png",
 
             "Dialogos": {
-                "CuadroDialogo": "cuadro_dialogo",
+                "Path": "/assets/img/dialogos/",
+
+                "CuadradoDialogo": "cuadrado_dialogo",
                 "BotonDialogo": "boton_dialogo"
             },
             "Personajes": {
-                "Path": "/assets/images/personajes/",
+                "Path": "/assets/img/personajes/",
 
                 "Personajes": [
                     "prota",
@@ -23,6 +25,14 @@
                     "alegre",
                     "triste",
                     "enfado"
+                ]
+            },
+            "Backgrounds": {
+                "Path": "/assets/img/backgrounds/",
+
+                "Backgrounds": [
+                    "clase",
+                    "salon"
                 ]
             }
         },
