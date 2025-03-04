@@ -1,0 +1,35 @@
+{
+    "Pantallas": {
+        "pantalla_prueba": {
+            "background": "salon",
+            "prota": {
+                "nombre": "prota",
+                "pose": "normal",
+                "pos_x": 400,
+                "pos_y": 400,
+                "size": 1.5,
+                "delay": 500,
+                "animation": {
+                    "type": "fade_in",
+                    "duration": 500
+                },
+                "on_click": null
+            },
+            "npcs": {
+                "npc_1": {
+                    "nombre": "maria",
+                    "pose": "normal",
+                    "pos_x": 580,
+                    "pos_y": 400,
+                    "size": 1.5,
+                    "delay": 0,
+                    "on_click": {
+                        "scene": "dialogo",
+                        "name": "dialogo_1"
+                    },
+                    "animation": null
+                }
+            }
+        }
+    }
+}

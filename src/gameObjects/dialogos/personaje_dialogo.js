@@ -1,5 +1,5 @@
 // Es el botón que se muestra en el diálogo
-class BotonDialogo extends Phaser.GameObjects.Sprite {
+class PersonajeDialogo extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, img_name) {
         super(scene, x, y, "");
 
@@ -13,8 +13,9 @@ class BotonDialogo extends Phaser.GameObjects.Sprite {
     add_personaje(scene, img_name) {
         this.change_texture(img_name);
         this.setOrigin(0, 1);
+        this.setScale(2);
         scene.add.existing(this);
     }
 }
 
-export default BotonDialogo;
+export default PersonajeDialogo;

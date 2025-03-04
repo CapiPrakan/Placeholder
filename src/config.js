@@ -1,12 +1,16 @@
 import Dialogo from '/src/scenes/dialogo.js';
 import Bootloader from '/src/bootloader.js'; // Importamos el Bootloader
 import ScenePlay from '/src/scenes/scene_play.js'; // Importamos la escena ScenePlay
+import Pantallas from '/src/scenes/pantallas.js'; // Importamos la escena Pantallas
 
 // Configuración del juego
 const config = {
     // Tamaño del canvas
     width: 1860,
-    height: 1056,
+    height: 1358,
+
+    // width: 1860/1.2,
+    // height: 1056+40,
 
     // Contenedor del canvas (donde queremos poner el juego en el html)
     parent: 'contenedor',
@@ -20,7 +24,8 @@ const config = {
     scene: [
         Bootloader,
         ScenePlay,
-        Dialogo
+        Dialogo,
+        Pantallas
     ],
 }
 

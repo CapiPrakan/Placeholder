@@ -17,7 +17,10 @@ class AssetsData {
         this.IMAGES = "Images";
         this.JSON = "Json";
 
+        this.COLLIDER = "Collider";
         this.DIALOGOS = "Dialogos";
+        this.PANTALLAS = "Pantallas";
+        this.CURSOR = "Cursor";
 
         this.PERSONAJES = "Personajes";
         this.POSES = "Poses";
@@ -25,9 +28,6 @@ class AssetsData {
         this.BACKGROUNDS = "Backgrounds";
 
         // prefijos y formatos
-        this.IMG_PREFIX = "img_";
-        this.FORMATO_IMAGEN = ".png";
-
         this.JSON_PREFIX = "json_";
         this.FORMATO_JSON = ".json";
 
@@ -35,15 +35,22 @@ class AssetsData {
         this.JSON_PATH = "/assets/json/";
 
         this.inicializar_constantes_datos();
-        this.inicializar_constantes_dialogos();
     }
+    
+    // ------------------------------------------------------------- //
+    //                             JSON                              //
+    // ------------------------------------------------------------- //
+
+    // ------------------------------------------------------------- //
+    //                            DATOS                              //
+    // ------------------------------------------------------------- //
 
     inicializar_constantes_datos() {
         // datos
         this.JSON_DATO = "data";
         this.JSON_DATO_PATH =  this.JSON_PATH + this.JSON_DATO + this.FORMATO_JSON;
     }
-    
+
     // carga los datos (json)
     cargar_datos() {
         this.scene.load.json(this.JSON_PREFIX + this.JSON_DATO, this.JSON_DATO_PATH)
@@ -72,89 +79,172 @@ class AssetsData {
         return this.JSON_PREFIX + this.JSON_DATO;
     }
 
+    // ------------------------------------------------------------- //
+    //                           DIALOGOS                            //
+    // ------------------------------------------------------------- //
+
     // carga los dialogos (json)
     cargar_dialogos() {
-        this.json_dialogo = this.datos_assets[this.JSON][this.PREFIX] + this.datos_assets[this.JSON][this.DIALOGOS]
+        let prefix = this.datos_assets[this.JSON][this.PREFIX];
+        
+        this.json_dialogo = prefix + this.datos_assets[this.JSON][this.DIALOGOS]
 
         this.json_dialogo_path = this.datos_assets[this.JSON][this.PATH] + this.datos_assets[this.JSON][this.DIALOGOS] + this.datos_assets[this.JSON][this.EXTENSION]
 
         this.scene.load.json(this.json_dialogo, this.json_dialogo_path);
     }
 
-    inicializar_constantes_dialogos() {
-        // dialogo
-        this.JSON_DIALOGO = "dialogo";
-        this.JSON_DIALOGO_PATH =  this.JSON_PATH + this.JSON_DIALOGO + this.FORMATO_JSON;
-    }
-
     get_json_dialogo() {
-        return this.JSON_PREFIX + this.JSON_DIALOGO;
+        return this.datos_assets[this.JSON][this.PREFIX] + this.datos_assets[this.JSON][this.DIALOGOS];
     }
 
     get_json_dialogo_path() {
-        this.JSON_DIALOGO_PATH;
+        this.json_dialogo_path;
     }
+
+    // ------------------------------------------------------------- //
+    //                           PANTALLAS                           //
+    // ------------------------------------------------------------- //
+
+    // carga los dialogos (json)
+    cargar_pantallas() {
+        this.json_pantalla = this.datos_assets[this.JSON][this.PREFIX] + this.datos_assets[this.JSON][this.PANTALLAS];
+
+        let json_pantalla_path = this.datos_assets[this.JSON][this.PATH] + this.datos_assets[this.JSON][this.PANTALLAS] + this.datos_assets[this.JSON][this.EXTENSION]
+
+        this.scene.load.json(this.json_pantalla, json_pantalla_path);
+    }
+
+    get_json_pantalla() {
+        return this.datos_assets[this.JSON][this.PREFIX] + this.datos_assets[this.JSON][this.PANTALLAS];
+    }
+
+    // ------------------------------------------------------------- //
+    //                           IMAGENES                            //
+    // ------------------------------------------------------------- //
+
+    // ------------------------------------------------------------- //
+    //                           COLLIDER                            //
+    // ------------------------------------------------------------- //
+
+    cargar_img_collider() {
+        this.collider = this.datos_assets[this.IMAGES][this.COLLIDER][this.COLLIDER];
+        let COLLIDER_PATH = this.datos_assets[this.IMAGES][this.COLLIDER][this.PATH];
+
+        this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + this.collider + "_" + this.COLLIDER, COLLIDER_PATH + this.collider + this.datos_assets[this.IMAGES][this.EXTENSION]);
+    }
+
+    get_collider() {
+        return this.datos_assets[this.IMAGES][this.PREFIX] + this.datos_assets[this.IMAGES][this.COLLIDER][this.COLLIDER] + "_" + this.COLLIDER;
+    }
+
+    // ------------------------------------------------------------- //
+    //                            CURSOR                             //
+    // ------------------------------------------------------------- //
+
+    cargar_img_cursor() {
+        let CURSOR_PATH = this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.PATH];
+
+        this.cursor = this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR];
+        this.cursor_selected = this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR] + "_selected";
+
+        this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + "_" + this.CURSOR, CURSOR_PATH + this.CURSOR + this.datos_assets[this.IMAGES][this.EXTENSION]);
+    }
+
+    get_cursor() {
+        return this.datos_assets[this.IMAGES][this.PREFIX] +  this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR] + "_" + this.CURSOR;
+    }
+
+    get_cursor_selected() {
+        return this.datos_assets[this.IMAGES][this.PREFIX] +  this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR] + "_selected" + "_" + this.CURSOR;
+    }
+
+    // ------------------------------------------------------------- //
+    //                           DIALOGOS                            //
+    // ------------------------------------------------------------- //
 
     cargar_img_dialogos() {
         // path de los dialogos
-        let DIALOGOS_PATH = this.datos_assets[this.IMAGES][this.DIALOGOS][this.PATH];
+        let DIALOGOS_PATH = this.datos_assets[this.IMAGES][this.DIALOGOS][this.DIALOGOS][this.PATH];
 
         // cuadrado_dialogo
-        this.CUADRADO_DIALOGO = this.datos_assets[this.IMAGES][this.DIALOGOS].CuadradoDialogo;
+        this.CUADRADO_DIALOGO = this.datos_assets[this.IMAGES][this.DIALOGOS][this.DIALOGOS].CuadradoDialogo;
 
         // boton_dialogo
-        this.BOTON_DIALOGO = this.datos_assets[this.IMAGES][this.DIALOGOS].BotonDialogo;
+        this.BOTON_DIALOGO = this.datos_assets[this.IMAGES][this.DIALOGOS][this.DIALOGOS].BotonDialogo;
 
         // cargamos los assets
-        this._cargar_imagen(this.IMG_PREFIX + this.CUADRADO_DIALOGO, DIALOGOS_PATH + this.CUADRADO_DIALOGO + this.FORMATO_IMAGEN)
-        this._cargar_imagen(this.IMG_PREFIX + this.BOTON_DIALOGO, DIALOGOS_PATH + this.BOTON_DIALOGO + this.FORMATO_IMAGEN)
+        this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + "_" + this.CUADRADO_DIALOGO, DIALOGOS_PATH + this.CUADRADO_DIALOGO + this.datos_assets[this.IMAGES][this.EXTENSION]);
+        this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX]+ "_" + this.BOTON_DIALOGO, DIALOGOS_PATH + this.BOTON_DIALOGO + this.datos_assets[this.IMAGES][this.EXTENSION]);
     }
 
     get_cuadrado_dialogo() {
-        return this.IMG_PREFIX + this.CUADRADO_DIALOGO;
+        return this.datos_assets[this.IMAGES][this.PREFIX] + "_" + this.CUADRADO_DIALOGO;
     }
 
     get_boton_dialogo() {
-        return this.IMG_PREFIX + this.BOTON_DIALOGO;
+        return this.datos_assets[this.IMAGES][this.PREFIX] + "_" + this.BOTON_DIALOGO;
     }
 
     // carga los personajes
-    cargar_personajes() {
-        let PERSONAJES_PATH = this.datos_assets[this.IMAGES][this.PERSONAJES][this.PATH];
+    cargar_personajes_dialogos() {
+        let PERSONAJES_PATH = this.datos_assets[this.IMAGES][this.DIALOGOS][this.PERSONAJES][this.PATH];
 
       
-        let PERSONAJES_POSES = this.datos_assets[this.IMAGES][this.PERSONAJES][this.POSES];
-        let PERSONAJES = this.datos_assets[this.IMAGES][this.PERSONAJES][this.PERSONAJES];
+        let PERSONAJES_POSES = this.datos_assets[this.IMAGES][this.DIALOGOS][this.PERSONAJES][this.POSES];
+        let PERSONAJES = this.datos_assets[this.IMAGES][this.DIALOGOS][this.PERSONAJES][this.PERSONAJES];
         
         for (let i = 0; i < PERSONAJES.length; i++) {
             for (let j = 0; j < PERSONAJES_POSES.length; j++) {
                 let img_name = PERSONAJES[i] + "_" + PERSONAJES_POSES[j]
-                let imagePath = PERSONAJES_PATH + PERSONAJES[i] + "/" + img_name + this.FORMATO_IMAGEN;
-                this._cargar_imagen(this.IMG_PREFIX + img_name, imagePath);
+                let imagePath = PERSONAJES_PATH + PERSONAJES[i] + "/" + img_name + this.datos_assets[this.IMAGES][this.EXTENSION];
+                this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + img_name + "_" + this.DIALOGOS, imagePath);
             }
         }
     }
 
-    get_personaje(persoanje, pose) {
-        return this.IMG_PREFIX + persoanje + "_" + pose;
+    get_personaje_dialogos(persoanje, pose) {
+        return this.datos_assets[this.IMAGES][this.PREFIX] + persoanje + "_" + pose + "_" + this.DIALOGOS;
     }
 
     // carga los fondos
-    cargar_backgrounds() {
-        let BACKGROUND_PATH = this.datos_assets[this.IMAGES][this.BACKGROUNDS][this.PATH];
+    cargar_backgrounds_dialogos() {
+        let BACKGROUND_PATH = this.datos_assets[this.IMAGES][this.DIALOGOS][this.BACKGROUNDS][this.PATH];
 
       
-        let BACKGROUNDS = this.datos_assets[this.IMAGES][this.BACKGROUNDS][this.BACKGROUNDS];
+        let BACKGROUNDS = this.datos_assets[this.IMAGES][this.DIALOGOS][this.BACKGROUNDS][this.BACKGROUNDS];
         
         for (let i = 0; i < BACKGROUNDS.length; i++) {
-            let imagePath = BACKGROUND_PATH +  BACKGROUNDS[i] + this.FORMATO_IMAGEN;
-            this._cargar_imagen(this.IMG_PREFIX + BACKGROUNDS[i], imagePath);
+            let imagePath = BACKGROUND_PATH +  BACKGROUNDS[i] + this.datos_assets[this.IMAGES][this.EXTENSION];
+            this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + BACKGROUNDS[i] + "_" + this.DIALOGOS, imagePath);
         }
     }
 
-    get_background(background) {
-        return this.IMG_PREFIX + background;
+    get_background_dialogos(background) {
+        return this.datos_assets[this.IMAGES][this.PREFIX] + background + "_" + this.DIALOGOS;
     }
+
+    // ------------------------------------------------------------- //
+    //                          PANTALLAS                            //
+    // ------------------------------------------------------------- //
+
+    // carga los fondos
+    cargar_backgrounds_pantallas() {
+        let BACKGROUND_PATH = this.datos_assets[this.IMAGES][this.PANTALLAS][this.BACKGROUNDS][this.PATH];
+
+      
+        let BACKGROUNDS = this.datos_assets[this.IMAGES][this.PANTALLAS][this.BACKGROUNDS][this.BACKGROUNDS];
+        
+        for (let i = 0; i < BACKGROUNDS.length; i++) {
+            let imagePath = BACKGROUND_PATH +  BACKGROUNDS[i] + this.datos_assets[this.IMAGES][this.EXTENSION];
+            this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + BACKGROUNDS[i] + "_" + this.PANTALLAS, imagePath);
+        }
+    }
+
+    get_background_pantallas(background) {
+        return this.datos_assets[this.IMAGES][this.PREFIX] + background + "_" + this.PANTALLAS;
+    }
+
 
     _cargar_imagen(key, url) {
         this.scene.load.image(key, url);

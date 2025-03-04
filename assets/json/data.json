@@ -5,35 +5,60 @@
             "Path": "/assets/img/",
             "Prefix": "img_",
             "Extension": ".png",
-
+            "Collider": {
+                "Path": "/assets/img/collider/",
+                "Collider": "collider"
+            },
+            "Cursor": {
+                "Path": "/assets/img/cursor/",
+                "Cursor": "cursor",
+                "CursorSelect": "cursor_selected"
+            },
             "Dialogos": {
                 "Path": "/assets/img/dialogos/",
 
-                "CuadradoDialogo": "cuadrado_dialogo",
-                "BotonDialogo": "boton_dialogo"
+                "Dialogos": { 
+                    "Path": "/assets/img/dialogos/dialogos/",
+
+                    "CuadradoDialogo": "cuadrado_dialogo",
+                    "BotonDialogo": "boton_dialogo"
+                },
+                "Personajes": {
+                    "Path": "/assets/img/dialogos/personajes/",
+
+                    "Personajes": [
+                        "prota",
+                        "veronica",
+                        "maria"
+                    ],
+
+                    "Poses": [
+                        "normal",
+                        "alegre",
+                        "triste",
+                        "enfado"
+                    ]
+                },
+                "Backgrounds": {
+                    "Path": "/assets/img/dialogos/backgrounds/",
+
+                    "Backgrounds": [
+                        "habitacion",
+                        "salon"
+                    ]
+                }
             },
-            "Personajes": {
-                "Path": "/assets/img/personajes/",
+            "Pantallas": {
+                "Path": "/assets/img/pantallas/",
 
-                "Personajes": [
-                    "prota",
-                    "veronica"
-                ],
+                "Backgrounds": {
+                    "Path": "/assets/img/pantallas/backgrounds/",
 
-                "Poses": [
-                    "normal",
-                    "alegre",
-                    "triste",
-                    "enfado"
-                ]
-            },
-            "Backgrounds": {
-                "Path": "/assets/img/backgrounds/",
-
-                "Backgrounds": [
-                    "clase",
-                    "salon"
-                ]
+                    "Backgrounds": [
+                        "habitacion",
+                        "salon"
+                    ]
+                }
             }
         },
         "Json": {
@@ -41,7 +66,8 @@
             "Prefix": "json_",
             "Extension": ".json",
 
-            "Dialogos": "dialogo"
+            "Dialogos": "dialogo",
+            "Pantallas": "pantallas"
         }
     }
 }

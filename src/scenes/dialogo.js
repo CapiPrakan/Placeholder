@@ -3,7 +3,7 @@ import { EVENT_TEXTO_DIALOGO, EVENT_SKIP_TEXTO_DIALOGO, EVENT_NEXT_TEXTO_DIALOGO
 
 import CuadroDialogo from "/src/gameObjects/dialogos/cuadrado_dialogo.js";
 import BotonDialogo from "/src/gameObjects/dialogos/boton_dialogo.js";
-import Personaje from "/src/gameObjects/dialogos/personaje.js";
+import Personaje from "/src/gameObjects/dialogos/personaje_dialogo.js";
 import BackgroundDialogo from '/src/gameObjects/dialogos/background_dialogo.js';
 import AssetsData from '/src/data/assets_data.js';
 
@@ -16,6 +16,8 @@ class Dialogo extends Phaser.Scene {
 
     init(texto) {
         // inicializar variables
+        this.assets_data.recargar_datos();
+
         this.texto_finalizado = false;
         this.nombre_dialogo = texto;
         this.dialogo_data = this.cache.json.get(this.assets_data.get_json_dialogo()).Dialogo;
@@ -25,10 +27,9 @@ class Dialogo extends Phaser.Scene {
 
     preload() {
         // cargar los assets
-        this.assets_data.recargar_datos();
         this.assets_data.cargar_img_dialogos();
-        this.assets_data.cargar_personajes();
-        this.assets_data.cargar_backgrounds();
+        this.assets_data.cargar_personajes_dialogos();
+        this.assets_data.cargar_backgrounds_dialogos();
 
         setTimeout(() => {
             this.can_be_clicked = true;
@@ -40,7 +41,7 @@ class Dialogo extends Phaser.Scene {
         this.width = this.sys.game.config.width;
         this.height = this.sys.game.config.height;
 
-        this.background = new BackgroundDialogo(this, 0, 0, this.assets_data.get_background(this.dialogo_data[this.nombre_dialogo]['fondo']));
+        this.background = new BackgroundDialogo(this, 0, 0, this.assets_data.get_background_dialogos(this.dialogo_data[this.nombre_dialogo]['fondo']));
 
         // Cuadro de diálogo
         this.cuadro_dialogo = new CuadroDialogo(this, this.width / 2, this.height - 150, this.assets_data.get_cuadrado_dialogo(), this.dialogo_data[this.nombre_dialogo]['texto'], false);
@@ -53,7 +54,7 @@ class Dialogo extends Phaser.Scene {
 
         let personaje_x = this.cuadro_dialogo.x - this.cuadro_dialogo.width / 4 - 50;
         let personaje_y = this.cuadro_dialogo.y - this.cuadro_dialogo.height / 2;
-        let img_name = this.assets_data.get_personaje(this.dialogo_data[this.nombre_dialogo]['npc'], this.dialogo_data[this.nombre_dialogo]['pose']);
+        let img_name = this.assets_data.get_personaje_dialogos(this.dialogo_data[this.nombre_dialogo]['npc'], this.dialogo_data[this.nombre_dialogo]['pose']);
         this.personaje = new Personaje(this, personaje_x, personaje_y, img_name);
 
         // Agrega un evento de clic al objeto input de la escena
@@ -121,9 +122,7 @@ class Dialogo extends Phaser.Scene {
 
     on_click() {
         if (!this.can_be_clicked) return;
-        console.log(this.dialogo_data[this.nombre_dialogo]['opciones']);   
         if (this.texto_finalizado && !this.dialogo_data[this.nombre_dialogo]['opciones']) {
-            console.log("Texto finalizado");
             if (this.dialogo_data[this.nombre_dialogo]['opcion_1'] == "FIN") {
                 this.scene.stop();
                 return;
@@ -149,7 +148,7 @@ class Dialogo extends Phaser.Scene {
         this.nombre_dialogo = name;
         this.texto_finalizado = false;
         
-        this.background.change_texture(this.assets_data.get_background(this.dialogo_data[this.nombre_dialogo]['fondo']));
+        this.background.change_texture(this.assets_data.get_background_dialogos(this.dialogo_data[this.nombre_dialogo]['fondo']));
 
 
         this.cuadro_dialogo.actualizar_texto(this.dialogo_data[this.nombre_dialogo]['texto']);
@@ -157,7 +156,7 @@ class Dialogo extends Phaser.Scene {
          // añade los botones, en caso de que haya opciones
         this.añadir_botones();
 
-        let img_name = this.assets_data.get_personaje(this.dialogo_data[this.nombre_dialogo]['npc'], this.dialogo_data[this.nombre_dialogo]['pose']);
+        let img_name = this.assets_data.get_personaje_dialogos(this.dialogo_data[this.nombre_dialogo]['npc'], this.dialogo_data[this.nombre_dialogo]['pose']);
         this.personaje.change_texture(img_name);
     }
 }

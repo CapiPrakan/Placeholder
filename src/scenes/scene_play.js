@@ -1,5 +1,5 @@
-import { SCENE_PLAY, SCENE_DIALOGO } from '/src/data/scene_data.ts';
-import { EVENT_DATOS_CARAGDOS } from "/src/data/events_data.ts";
+import { SCENE_PLAY, SCENE_PANTALLAS, SCENE_DIALOGO } from '/src/data/scene_data.ts';
+import { EVENT_DATOS_CARAGDOS, EVENT_START_DIALOGO } from "/src/data/events_data.ts";
 
 import AssetsData from '/src/data/assets_data.js';
 
@@ -16,12 +16,20 @@ class ScenePlay extends Phaser.Scene {
 
         this.events.once(EVENT_DATOS_CARAGDOS, () => {
             this.assets_data.cargar_dialogos();
+            this.assets_data.cargar_pantallas();
         });
+
+        this.scene.get(SCENE_PANTALLAS).events.on(EVENT_START_DIALOGO, this.start_dialogo, this);
     }
 
     create() {
         // lanzamos la escena de dialogo, pero scene_play sigue activa
-        this.scene.launch(SCENE_DIALOGO, "dialogo_1");
+        // this.scene.launch(SCENE_DIALOGO, "dialogo_1");
+        this.pantallas = this.scene.start(SCENE_PANTALLAS, "pantalla_prueba");
+    }
+
+    start_dialogo(dialogo) {
+        this.scene.launch(SCENE_DIALOGO, dialogo);
     }
 }
 
