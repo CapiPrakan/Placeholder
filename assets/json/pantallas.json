@@ -1,6 +1,6 @@
 {
     "Pantallas": {
-        "pantalla_prueba": {
+        "salon_1": {
             "background": "salon",
             "prota": {
                 "nombre": "prota",
@@ -28,6 +28,67 @@
                         "name": "dialogo_1"
                     },
                     "animation": null
+                }
+            },
+            "change_pantallas_objects": {
+                "puerta_habitacion": {
+                    "pos_x": 50,
+                    "pos_y": 900,
+                    "size_x": 200,
+                    "size_y": 800,
+                    "delay": 0,
+                    "animation": null,
+                    "on_click": {
+                        "active": true,
+                        "name": "habitacion_1",
+                        "direction": "left"
+                    }
+                }
+            }
+        },
+        "habitacion_1": {
+            "background": "habitacion",
+            "prota": {
+                "nombre": "prota",
+                "pose": "normal",
+                "pos_x": 800,
+                "pos_y": 800,
+                "size": 1.8,
+                "delay": 0,
+                "animation": null,
+                "on_click": null
+            },
+            "npcs": {
+                "npc_1": {
+                    "nombre": "maria",
+                    "pose": "normal",
+                    "pos_x": 1100,
+                    "pos_y": 800,
+                    "size": 1.8,
+                    "delay": 500,
+                    "on_click": {
+                        "scene": "dialogo",
+                        "name": "dialogo_1"
+                    },
+                    "animation": {
+                        "type": "fade_in",
+                        "duration": 500
+                    }
+                }
+            },
+            "change_pantallas_objects": {
+                "puerta_salon": {
+                    "pos_x": 1850,
+                    "pos_y": 890,
+                    "size_x": 200,
+                    "size_y": 920,
+                    "delay": 0,
+                    "animation": null,
+                    "on_click": {
+                        "active": true,
+                        "name": "salon_1",
+                        "direction": "left"
+                    }
                 }
             }
         }

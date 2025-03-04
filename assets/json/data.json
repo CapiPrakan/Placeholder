@@ -12,7 +12,9 @@
             "Cursor": {
                 "Path": "/assets/img/cursor/",
                 "Cursor": "cursor",
-                "CursorSelect": "cursor_selected"
+                "CursorSelect": "cursor_selected",
+                "CursorLeft": "cursor_left",
+                "CursorRight": "cursor_right"
             },
             "Dialogos": {
                 "Path": "/assets/img/dialogos/",

@@ -4,22 +4,12 @@ import Protagonista from '/src/gameObjects/pantallas/interactuables/potagonista.
 import ChangePantallaObject from '/src/gameObjects/pantallas/interactuables/change_pantalla_objects.js';
 
 import { SCENE_PANTALLAS } from '/src/data/scene_data.ts';
-import { EVENT_START_DIALOGO, EVENT_ANIMATION_INTRERACTUABLE_FINNISHED } from "/src/data/events_data.ts";
+import { EVENT_ANIMATION_INTRERACTUABLE_FINNISHED } from "/src/data/events_data.ts";
 
 class Pantallas extends Phaser.Scene {
     constructor() {
         super({ key: SCENE_PANTALLAS });
 
-        this.scene_play ;
-
-        this.offset_x = 0;
-        this.offset_y = 0;
-
-        this.can_move = false;
-        this.animation_finnished = false;
-
-        this.interactuables_animations = {};
-        
         this.assets_data = new AssetsData(this);
     }
 
@@ -32,10 +22,19 @@ class Pantallas extends Phaser.Scene {
 
     init(pantalla) {
         this.assets_data.recargar_datos();
+        this.scene_play ;
 
-        this.pantalla_data = this.cache.json.get(this.assets_data.get_json_pantalla()).Pantallas;
+        this.offset_x = 0;
+        this.offset_y = 0;
+
+        this.can_move = false;
+        this.animation_finnished = false;
+
+        this.interactuables_animations = {};
 
         this.nombre_pantalla = pantalla;
+
+        this.pantalla_data = this.cache.json.get(this.assets_data.get_json_pantalla()).Pantallas;
     }
 
     create() {
@@ -45,11 +44,10 @@ class Pantallas extends Phaser.Scene {
 
         this.npcs = this.create_npcs();
 
-        this.change_pantallas_oibject = new ChangePantallaObject(this, this.sys.game.config.width / 2, this.sys.game.config.height / 2, 100, 300, true);
+        this.change_pantallas_oibjects = this.create_change_pantalla_objects();
 
         // Agregar listener para el movimiento del ratón
         this.input.on('pointermove', this.onPointerMove, this);
-        this.events.on(EVENT_START_DIALOGO, this.start_dialogo, this);
         this.events.on(EVENT_ANIMATION_INTRERACTUABLE_FINNISHED, this.on_animation_finnished, this);
     }
 
@@ -103,6 +101,25 @@ class Pantallas extends Phaser.Scene {
         return npcs_array;
     }
 
+    create_change_pantalla_objects() {
+        let change_pantallas_objects = this.pantalla_data[this.nombre_pantalla]['change_pantallas_objects'];
+        let change_pantallas_objects_array = [];
+
+        Object.keys(change_pantallas_objects).forEach((key) => {
+            let pos_x = change_pantallas_objects[key]['pos_x'];
+            let pos_y = change_pantallas_objects[key]['pos_y'];
+            let size_x = change_pantallas_objects[key]['size_x'];
+            let size_y = change_pantallas_objects[key]['size_y'];
+            let on_click = change_pantallas_objects[key]['on_click'];
+
+            let change_pantalla_object = new ChangePantallaObject(this, pos_x, pos_y, size_x, size_y, on_click);
+
+            change_pantallas_objects_array.push(change_pantalla_object);
+        });
+
+        return change_pantallas_objects_array;
+    }
+
     update() {
         if (this.can_move && this.animation_finnished) {
             let movimiento_x = 0;
@@ -125,6 +142,10 @@ class Pantallas extends Phaser.Scene {
 
             this.npcs.forEach(npc => {
                 this.move_objects(npc, movimiento_x, movimiento_y);
+            });
+
+            this.change_pantallas_oibjects.forEach(change_pantalla_object => {
+                this.move_objects(change_pantalla_object, movimiento_x, movimiento_y);
             });
         }
     }
@@ -198,10 +219,6 @@ class Pantallas extends Phaser.Scene {
     move_objects(objeto, x, y) {
         objeto.x += x;
         objeto.y += y;
-    }
-
-    start_dialogo(dialogo) {
-        this.scene.stop();
     }
 }
 

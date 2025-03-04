@@ -69,6 +69,7 @@ class AssetsData {
 
     // vuelve a hacer load del dato
     recargar_datos() {
+        console.log("recargar datos");
         this.datos = this.scene.cache.json.get(this.JSON_PREFIX + this.JSON_DATO);
         if (this.datos) {
             this.datos_assets = this.datos.Assets;
@@ -132,10 +133,15 @@ class AssetsData {
         let COLLIDER_PATH = this.datos_assets[this.IMAGES][this.COLLIDER][this.PATH];
 
         this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + this.collider + "_" + this.COLLIDER, COLLIDER_PATH + this.collider + this.datos_assets[this.IMAGES][this.EXTENSION]);
+        this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + this.collider + "_debug" + "_" + this.COLLIDER, COLLIDER_PATH + this.collider  + "_debug" + this.datos_assets[this.IMAGES][this.EXTENSION]);
     }
 
     get_collider() {
         return this.datos_assets[this.IMAGES][this.PREFIX] + this.datos_assets[this.IMAGES][this.COLLIDER][this.COLLIDER] + "_" + this.COLLIDER;
+    }
+
+    get_collider_debug() {
+        return this.datos_assets[this.IMAGES][this.PREFIX] + this.datos_assets[this.IMAGES][this.COLLIDER][this.COLLIDER] + "_debug" + "_" + this.COLLIDER;
     }
 
     // ------------------------------------------------------------- //
@@ -147,8 +153,11 @@ class AssetsData {
 
         this.cursor = this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR];
         this.cursor_selected = this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR] + "_selected";
+        this.cursor_left = this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR] + "_left";
+        this.cursor_right = this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR] + "_right";
 
         this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + "_" + this.CURSOR, CURSOR_PATH + this.CURSOR + this.datos_assets[this.IMAGES][this.EXTENSION]);
+        this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + "_" + this.CURSOR + "_selected", CURSOR_PATH + this.CURSOR + "_selected" + this.datos_assets[this.IMAGES][this.EXTENSION]);
     }
 
     get_cursor() {
@@ -157,6 +166,14 @@ class AssetsData {
 
     get_cursor_selected() {
         return this.datos_assets[this.IMAGES][this.PREFIX] +  this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR] + "_selected" + "_" + this.CURSOR;
+    }
+
+    get_cursor_left() {
+        return this.datos_assets[this.IMAGES][this.PREFIX] +  this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR] + "_left" + "_" + this.CURSOR;
+    }
+
+    get_cursor_right() {
+        return this.datos_assets[this.IMAGES][this.PREFIX] +  this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR] + "_right" + "_" + this.CURSOR;
     }
 
     // ------------------------------------------------------------- //

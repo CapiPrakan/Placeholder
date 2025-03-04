@@ -66,16 +66,24 @@ class InteractuableDefault extends Phaser.GameObjects.Sprite {
     set_events() {
         // al pasar el ratón por encima
         this.on("pointerover", () => {
-            if (!this.can_be_clicked)
-                return;
-            this.setTint(0xdce8ff);
+            this.mouse_entered();
         });
 
         // al sacar el raton del boton
         this.on("pointerout", () => {
-            this.clearTint();
+            this.mouse_exited();
         });
     }
+
+    mouse_entered() {
+        if (!this.can_be_clicked)
+            return;
+        this.setTint(0xdce8ff);
+    }
+
+    mouse_exited() {
+        this.clearTint();
+}
 
     // Función que se ejecuta antes de destruirse
     beforeDestroy() {

@@ -1,5 +1,6 @@
 import InteractuableDefault from "/src/gameObjects/pantallas/interactuable_default.js";
 import { EVENT_START_DIALOGO, EVENT_START_PANTALLA } from "/src/data/events_data.ts";
+import { SCENE_MANAGER } from '/src/data/scene_data.ts';
 
 class Protagonista extends InteractuableDefault {
     constructor(scene, x, y, type, size, delay, on_click, animation) {
@@ -20,7 +21,9 @@ class Protagonista extends InteractuableDefault {
             if (this.on_click.scene === "pantalla") {
                 scene = EVENT_START_PANTALLA;
             }
-            this.scene.events.emit(scene, this.on_click.name);
+
+            console.log(scene)
+            this.scene.scene.get(SCENE_MANAGER).events.emit(scene, this.on_click.name);
         });
     }
 }
