@@ -1,7 +1,7 @@
 {
   "Dialogo": {
     "demo_dialogo_maria_1": {
-      "texto": "Buenas, me soy Maria, encantada!!",
+      "texto": "Buenas, soy Maria, encantada!!",
       "npc": "maria",
       "pose": "alegre",
       "fondo": "salon",

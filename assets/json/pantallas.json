@@ -198,6 +198,20 @@
                         "name": "demo_habitacion_3",
                         "direction": "left"
                     }
+                },
+                "puerta_salida": {
+                    "nombre": "salir",
+                    "pos_x": 1820,
+                    "pos_y": 900,
+                    "size_x": 150,
+                    "size_y": 800,
+                    "delay": 0,
+                    "animation": null,
+                    "on_click": {
+                        "active": true,
+                        "name": "fin_demo",
+                        "direction": "right"
+                    }
                 }
             }
         },
