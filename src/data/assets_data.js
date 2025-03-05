@@ -69,7 +69,6 @@ class AssetsData {
 
     // vuelve a hacer load del dato
     recargar_datos() {
-        console.log("recargar datos");
         this.datos = this.scene.cache.json.get(this.JSON_PREFIX + this.JSON_DATO);
         if (this.datos) {
             this.datos_assets = this.datos.Assets;
@@ -149,31 +148,40 @@ class AssetsData {
     // ------------------------------------------------------------- //
 
     cargar_img_cursor() {
-        let CURSOR_PATH = this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.PATH];
+        let CURSOR_PATH = this.datos_assets[this.IMAGES][this.CURSOR][this.PATH];
 
-        this.cursor = this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR];
-        this.cursor_selected = this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR] + "_selected";
-        this.cursor_left = this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR] + "_left";
-        this.cursor_right = this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR] + "_right";
+        this.cursor = this.datos_assets[this.IMAGES][this.CURSOR][this.CURSOR];
+        this.cursor_selected = this.datos_assets[this.IMAGES][this.CURSOR][this.CURSOR] + "_selected";
+        this.cursor_left = this.datos_assets[this.IMAGES][this.CURSOR][this.CURSOR] + "_left";
+        this.cursor_right = this.datos_assets[this.IMAGES][this.CURSOR][this.CURSOR] + "_right";
+        this.background_cursor = this.datos_assets[this.IMAGES][this.CURSOR]["Background"];
 
-        this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + "_" + this.CURSOR, CURSOR_PATH + this.CURSOR + this.datos_assets[this.IMAGES][this.EXTENSION]);
-        this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + "_" + this.CURSOR + "_selected", CURSOR_PATH + this.CURSOR + "_selected" + this.datos_assets[this.IMAGES][this.EXTENSION]);
+
+        this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + this.cursor + "_" + this.CURSOR, CURSOR_PATH + this.cursor + this.datos_assets[this.IMAGES][this.EXTENSION]);
+        this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + this.cursor + "_selected"+ "_" + this.CURSOR, CURSOR_PATH + this.cursor + "_selected" + this.datos_assets[this.IMAGES][this.EXTENSION]);
+        this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + this.cursor + "_left"+ "_" + this.CURSOR, CURSOR_PATH + this.cursor + "_left" + this.datos_assets[this.IMAGES][this.EXTENSION]);
+        this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + this.cursor + "_right"+ "_" + this.CURSOR, CURSOR_PATH + this.cursor + "_right" + this.datos_assets[this.IMAGES][this.EXTENSION]);
+        this._cargar_imagen(this.datos_assets[this.IMAGES][this.PREFIX] + this.background_cursor + "_" + this.CURSOR, CURSOR_PATH + this.background_cursor + this.datos_assets[this.IMAGES][this.EXTENSION]);
     }
 
     get_cursor() {
-        return this.datos_assets[this.IMAGES][this.PREFIX] +  this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR] + "_" + this.CURSOR;
+        return this.datos_assets[this.IMAGES][this.PREFIX] +  this.datos_assets[this.IMAGES][this.CURSOR][this.CURSOR] + "_" + this.CURSOR;
     }
 
     get_cursor_selected() {
-        return this.datos_assets[this.IMAGES][this.PREFIX] +  this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR] + "_selected" + "_" + this.CURSOR;
+        return this.datos_assets[this.IMAGES][this.PREFIX] +  this.datos_assets[this.IMAGES][this.CURSOR][this.CURSOR] + "_selected" + "_" + this.CURSOR;
     }
 
     get_cursor_left() {
-        return this.datos_assets[this.IMAGES][this.PREFIX] +  this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR] + "_left" + "_" + this.CURSOR;
+        return this.datos_assets[this.IMAGES][this.PREFIX] +  this.datos_assets[this.IMAGES][this.CURSOR][this.CURSOR] + "_left" + "_" + this.CURSOR;
     }
 
     get_cursor_right() {
-        return this.datos_assets[this.IMAGES][this.PREFIX] +  this.datos_assets[this.IMAGES][this.ASSETS][this.CURSOR][this.CURSOR] + "_right" + "_" + this.CURSOR;
+        return this.datos_assets[this.IMAGES][this.PREFIX] +  this.datos_assets[this.IMAGES][this.CURSOR][this.CURSOR] + "_right" + "_" + this.CURSOR;
+    }
+
+    get_background_cursor() {
+        return this.datos_assets[this.IMAGES][this.PREFIX] +  this.datos_assets[this.IMAGES][this.CURSOR]["Background"] + "_" + this.CURSOR;
     }
 
     // ------------------------------------------------------------- //

@@ -8,6 +8,7 @@ class AnimationData {
         this.TYPE = "type";
 
         this.FADE_IN = "fade_in";
+        this.FADE_OUT = "fade_out";
 
         this.DURATION = "duration";
 
@@ -47,6 +48,9 @@ class AnimationData {
             case this.FADE_IN:
                 this.fade_in(animation);
                 break;
+            case this.FADE_OUT:
+                this.fade_out(animation);
+                break;
             default:
                 console.error("Tipo de animación no encontrado");
         }
@@ -58,6 +62,13 @@ class AnimationData {
 
         this.animation_data[this.ALPHA] = 1;
         this.animation_data[this.ALPHA_ORIGINAL] = 0;
+    }
+
+    fade_out(animation) {
+        this.animation_data[this.DURATION] = animation[this.DURATION];
+
+        this.animation_data[this.ALPHA] = 0;
+        this.animation_data[this.ALPHA_ORIGINAL] = 1;
     }
 }
 

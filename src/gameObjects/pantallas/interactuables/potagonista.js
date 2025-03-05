@@ -3,8 +3,8 @@ import { EVENT_START_DIALOGO, EVENT_START_PANTALLA } from "/src/data/events_data
 import { SCENE_MANAGER } from '/src/data/scene_data.ts';
 
 class Protagonista extends InteractuableDefault {
-    constructor(scene, x, y, type, size, delay, on_click, animation) {
-        super(scene, x, y, type, size, size, delay, on_click, animation);
+    constructor(scene, x, y, type, size, delay, on_click, animation, nombre) {
+        super(scene, x, y, type, size, size, delay, on_click, animation, nombre);
 
         this.can_be_clicked = true;
     }
@@ -22,7 +22,6 @@ class Protagonista extends InteractuableDefault {
                 scene = EVENT_START_PANTALLA;
             }
 
-            console.log(scene)
             this.scene.scene.get(SCENE_MANAGER).events.emit(scene, this.on_click.name);
         });
     }

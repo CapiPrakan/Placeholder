@@ -1,5 +1,6 @@
 import TextoDialogo from "/src/gameObjects/dialogos/texto_dialogo.js";
 import { EVENT_SKIP_TEXTO_DIALOGO, EVENT_NEXT_TEXTO_DIALOGO } from "/src/data/events_data.ts";
+import { SCENE_MANAGER } from '/src/data/scene_data.ts';
 
 // Es el botón que se muestra en el diálogo
 class BotonDialogo extends Phaser.GameObjects.Sprite {
@@ -89,11 +90,17 @@ class BotonDialogo extends Phaser.GameObjects.Sprite {
             if (!this.can_be_clicked)
                 return;
             this.setTint(0x787878);
+
+            let scene_manager = this.scene.scene.get(SCENE_MANAGER);
+            scene_manager.change_cursor("selected");
         });
 
         // al sacar el raton del boton
         this.on("pointerout", () => {
             this.clearTint();
+
+            let scene_manager = this.scene.scene.get(SCENE_MANAGER);
+            scene_manager.change_cursor("normal");
         });
     }
 

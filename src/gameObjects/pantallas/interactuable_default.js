@@ -1,12 +1,14 @@
 import AnimationData from "/src/data/animation_data.js";
 import { EVENT_ANIMATION_INTRERACTUABLE_FINNISHED } from "/src/data/events_data.ts";
+import { SCENE_MANAGER } from '/src/data/scene_data.ts';
 
 // Es el botón que se muestra en el diálogo
 class InteractuableDefault extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, type, size_x, size_y, delay, on_click, animation) {
+    constructor(scene, x, y, type, size_x, size_y, delay, on_click, animation, nombre) {
         super(scene, x, y, type);
 
         this.name = type;
+        this.nombre = nombre;
 
         // lo hacemos interactuable
         this.setInteractive();
@@ -79,10 +81,18 @@ class InteractuableDefault extends Phaser.GameObjects.Sprite {
         if (!this.can_be_clicked)
             return;
         this.setTint(0xdce8ff);
+
+        let scene_manager = this.scene.scene.get(SCENE_MANAGER);
+        scene_manager.change_cursor("selected");
+        scene_manager.show_background_cursor(true, this.nombre);
     }
 
     mouse_exited() {
         this.clearTint();
+
+        let scene_manager = this.scene.scene.get(SCENE_MANAGER);
+        scene_manager.change_cursor("normal");
+        scene_manager.show_background_cursor(false);
 }
 
     // Función que se ejecuta antes de destruirse

@@ -2,6 +2,7 @@ import { SCENE_MANAGER, SCENE_PANTALLAS, SCENE_DIALOGO } from '/src/data/scene_d
 import { EVENT_START_DIALOGO, EVENT_START_PANTALLA } from "/src/data/events_data.ts";
 
 import AssetsData from '/src/data/assets_data.js';
+import Cursor from '/src/gameObjects/cursor.js';
 
 // esta escena de momento solo lanza la escena de dialogo
 class SceneManager extends Phaser.Scene {
@@ -15,12 +16,14 @@ class SceneManager extends Phaser.Scene {
     }
 
     preload() {
+        this.assets_data.cargar_img_cursor();
         setTimeout(() => {
             this.change_cursor("normal");
-        }, 100);
+        }, 1000);
     }
 
     create() {
+        this.cursor = new Cursor(this, 400, 300, this.assets_data.get_background_cursor(), this.assets_data);
 
         this.events.on(EVENT_START_DIALOGO, this.start_dialogo, this);
         this.events.on(EVENT_START_PANTALLA, this.start_pantalla, this);
@@ -33,39 +36,28 @@ class SceneManager extends Phaser.Scene {
 
     start_pantalla(pantalla) {
         this.stop_scenes();
-        this.scene.start(SCENE_PANTALLAS, pantalla);
+        this.scene.launch(SCENE_PANTALLAS, pantalla);
     }
 
     stop_scenes() {
+        this.change_cursor("normal");
+        this.show_background_cursor(false);
+
         if (this.scene.isActive(SCENE_PANTALLAS)) {
-            console.log("stop scene pantallas");
             this.scene.stop(SCENE_PANTALLAS);
         }
         
         if (this.scene.isActive(SCENE_DIALOGO)) {
-            console.log("stop scene dialogo");
             this.scene.stop(SCENE_DIALOGO);
         }
     }
 
     change_cursor(cursor) {
-        switch (cursor) {
-            case "normal":
-                this.change_img_cursor(this.assets_data.get_cursor());
-                break;
-            default:
-                console.error("Tipo de animación no encontrado");
-        }
+        this.cursor.change_cursor(cursor);
     }
 
-    change_img_cursor(textureKey) {
-        const texture = this.textures.get(textureKey);
-                if (texture) {
-                    const url = texture.getSourceImage().src;
-                    this.input.setDefaultCursor(`url(${url}), pointer`);
-                } else {
-                    console.error(`Textura ${textureKey} no encontrada`);
-                }
+    show_background_cursor(active, name) {
+        this.cursor.show_background_cursor(active, name);
     }
 }
 

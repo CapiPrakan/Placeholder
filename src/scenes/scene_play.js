@@ -20,14 +20,13 @@ class ScenePlay extends Phaser.Scene {
         });
 
         this.scene.get(SCENE_PANTALLAS).events.on(EVENT_START_DIALOGO, this.start_dialogo, this);
-
-        this.scene.launch(SCENE_MANAGER);
     }
 
     create() {
+        this.scene.launch(SCENE_MANAGER);
         // lanzamos la escena de dialogo, pero scene_play sigue activa
         // this.scene.launch(SCENE_DIALOGO, "dialogo_1");
-        this.pantallas = this.scene.start(SCENE_PANTALLAS, "habitacion_1");
+        this.pantallas = this.scene.start(SCENE_PANTALLAS, "demo_habitacion_1");
     }
 
     start_dialogo(dialogo) {

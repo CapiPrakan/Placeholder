@@ -58,6 +58,9 @@ class Pantallas extends Phaser.Scene {
     }
 
     create_protgonista() {
+        if (!this.pantalla_data[this.nombre_pantalla]['prota']) {
+            return;
+        }
         let nombre = this.pantalla_data[this.nombre_pantalla]['prota']['nombre'];
         let pose = this.pantalla_data[this.nombre_pantalla]['prota']['pose'];
         let pos_x = this.pantalla_data[this.nombre_pantalla]['prota']['pos_x'];
@@ -69,7 +72,7 @@ class Pantallas extends Phaser.Scene {
 
         let personaje = this.assets_data.get_personaje_dialogos(nombre, pose);
 
-        let protagonista = new Protagonista(this, pos_x, pos_y, personaje, size, delay, on_click, animation);
+        let protagonista = new Protagonista(this, pos_x, pos_y, personaje, size, delay, on_click, animation, nombre);
 
         this.interactuables_animations[personaje] = false;
 
@@ -92,7 +95,7 @@ class Pantallas extends Phaser.Scene {
 
             let personaje = this.assets_data.get_personaje_dialogos(nombre, pose);
 
-            let npc = new Protagonista(this, pos_x, pos_y, personaje, size, delay, on_click, animation);
+            let npc = new Protagonista(this, pos_x, pos_y, personaje, size, delay, on_click, animation, nombre);
             this.interactuables_animations[personaje] = false;
 
             npcs_array.push(npc);
@@ -111,8 +114,9 @@ class Pantallas extends Phaser.Scene {
             let size_x = change_pantallas_objects[key]['size_x'];
             let size_y = change_pantallas_objects[key]['size_y'];
             let on_click = change_pantallas_objects[key]['on_click'];
+            let nombre = change_pantallas_objects[key]['nombre'];
 
-            let change_pantalla_object = new ChangePantallaObject(this, pos_x, pos_y, size_x, size_y, on_click);
+            let change_pantalla_object = new ChangePantallaObject(this, pos_x, pos_y, size_x, size_y, on_click, nombre);
 
             change_pantallas_objects_array.push(change_pantalla_object);
         });

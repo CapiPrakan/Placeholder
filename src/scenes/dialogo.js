@@ -1,5 +1,5 @@
-import { SCENE_DIALOGO } from '/src/data/scene_data.ts';
-import { EVENT_TEXTO_DIALOGO, EVENT_SKIP_TEXTO_DIALOGO, EVENT_NEXT_TEXTO_DIALOGO} from '/src/data/events_data.ts';
+import { SCENE_DIALOGO, SCENE_MANAGER } from '/src/data/scene_data.ts';
+import { EVENT_TEXTO_DIALOGO, EVENT_SKIP_TEXTO_DIALOGO, EVENT_NEXT_TEXTO_DIALOGO, EVENT_START_PANTALLA } from '/src/data/events_data.ts';
 
 import CuadroDialogo from "/src/gameObjects/dialogos/cuadrado_dialogo.js";
 import BotonDialogo from "/src/gameObjects/dialogos/boton_dialogo.js";
@@ -124,7 +124,7 @@ class Dialogo extends Phaser.Scene {
         if (!this.can_be_clicked) return;
         if (this.texto_finalizado && !this.dialogo_data[this.nombre_dialogo]['opciones']) {
             if (this.dialogo_data[this.nombre_dialogo]['opcion_1'] == "FIN") {
-                this.scene.stop();
+                this.scene.get(SCENE_MANAGER).events.emit(EVENT_START_PANTALLA, this.dialogo_data[this.nombre_dialogo]['texto_1']);
                 return;
             }
             this.events.emit(EVENT_NEXT_TEXTO_DIALOGO, this.dialogo_data[this.nombre_dialogo]['opcion_1']);

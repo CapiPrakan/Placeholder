@@ -14,7 +14,8 @@
                 "Cursor": "cursor",
                 "CursorSelect": "cursor_selected",
                 "CursorLeft": "cursor_left",
-                "CursorRight": "cursor_right"
+                "CursorRight": "cursor_right",
+                "Background": "background"
             },
             "Dialogos": {
                 "Path": "/assets/img/dialogos/",
@@ -46,7 +47,10 @@
 
                     "Backgrounds": [
                         "habitacion",
-                        "salon"
+                        "salon",
+                        "salon_cocina",
+                        "salon_comedor",
+                        "salon_descanso"
                     ]
                 }
             },
@@ -58,7 +62,8 @@
 
                     "Backgrounds": [
                         "habitacion",
-                        "salon"
+                        "salon",
+                        "fin_demo"
                     ]
                 }
             }
